@@ -43,7 +43,7 @@ library("ggthemr") # devtools::install_github('ggthemr', 'cttobin')
 library("dimple") #devtools::install_github("Bart6114/dimple")
 #library("jsonlite")
 #library("RJSONIO")
-
+library("taucharts") # devtools::install_github("hrbrmstr/taucharts")
 #-----------------------------------------
 # load dataset
 #
@@ -209,10 +209,12 @@ histPlot <- function( ds, x, nbins, group_var ){
       scale_x_continuous(limits=c(min(as.numeric(ds[,x])),max(as.numeric(ds[,x])))) +
       geom_vline(data=cdf, aes_string(xintercept="x.means", colour="gv"), linetype="dashed", size=1)
     
+    
   }else{
     h <- ggplot(ds, aes_string(x=x)) + geom_histogram( aes( y=..density..,fill=..count.. ), binwidth=range_var ) +
       scale_x_continuous(limits=c(min(as.numeric(ds[,x])),max(as.numeric(ds[,x])))) +
       geom_vline(aes_string(xintercept=mean(ds[,x], na.rm=T)), color="red", linetype="dashed", size=1) 
+   
   }
   
 }
