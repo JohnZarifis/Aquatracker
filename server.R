@@ -656,19 +656,19 @@ output$summary_stats_Ph <- renderTable({
 #---------------------------------------------------------------------------------------------------
 #     Dislpay dataset (Data)
 #---------------------------------------------------------------------------------------------------
-# Dislpay dataset
-output$dataset <- DT::renderDataTable({
-  
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
-      data <- passData() 
-      DT::datatable(data, class='compact', rowname = TRUE, caption="Dataset for processing...",
-                filter = 'top', options=list(autoWidth=TRUE) ) 
-    })
-  } 
-})
+# # Dislpay dataset
+# output$dataset <- DT::renderDataTable({
+#   
+#   if (input$goUniPlot == 0) { 
+#     return() }
+#   else{ 
+#     isolate({  
+#       data <- passData() 
+#       DT::datatable(data, class='compact', rowname = TRUE, caption="Dataset for processing...",
+#                 filter = 'top', options=list(autoWidth=TRUE) ) 
+#     })
+#   } 
+# })
 
 
 #---------------------------------------------------------------------------------------------------
@@ -691,6 +691,27 @@ output$scatterMatrixPlot <- renderPlot({
    })
   }
 })
+
+output$pD3 <- renderPairsD3({
+  dim_vars = c("End.Av.Weight", "Econ.FCR.Period", "SFR.Period", "SGR.Period",  
+               "Mortality", "Avg.Temperature", 
+               "GPD", "Bio.FCR", "Period.Feed.Qty")
+  pairsD3(passData()[,dim_vars], group = group(),  labels = NULL)
+})
+
+group = reactive({
+  if(input$radioDimMulti=="None"){
+    return(NULL)
+    
+  } else return(passData()[,input$radioDimMulti])
+})
+
+
+output$pairsplot = renderUI({
+  pairsD3Output("pD3",width = "800px", height = "800px")
+})
+
+
  
 #...................................................... S1
 output$scatterPlot.EndAvWeight.PeriodFCR <- renderPlot({ 

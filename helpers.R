@@ -44,6 +44,7 @@ library("dimple") #devtools::install_github("Bart6114/dimple")
 #library("jsonlite")
 #library("RJSONIO")
 library("taucharts") # devtools::install_github("hrbrmstr/taucharts")
+library('pairsD3')
 #-----------------------------------------
 # load dataset
 #

@@ -129,10 +129,10 @@ shinyUI(
                                                     h4("NO2 (ppm.):"),
                                                     tableOutput("summary_stats_NO2")
                                                  
-                                        ), # end tabPanel Summary Statistics
-                                        tabPanel("Data", 
-                                                    DT::dataTableOutput("dataset") 
-                                        )
+                                        )#, # end tabPanel Summary Statistics
+                                      #  tabPanel("Data", 
+                                      #              DT::dataTableOutput("dataset") 
+                                      #  )
                                      ) # end tabsetPanel
                                     )# end mainPanel
                                   ) # end sidebarLayout
@@ -145,15 +145,15 @@ shinyUI(
                           #titlePanel("Exploratory Data Analysis"),
                           fluidRow( column(9, radioButtons("radioDimMulti", label = h3("Separate The Dataset By:"), 
                                                       choices = list("None",  "Batch", "Unit", "Hatchery",
-                                                       "Origin.Year", 
-                                                        "Feed Type"="Actual.Feed"), selected = "None", inline = TRUE)),
+                                                       "Origin.Year","Feed Type"="Actual.Feed"), selected = "None", inline = TRUE)),
                                     column(3, actionButton(inputId = 'goMultiPlot',  label = 'Refresh Multivariate plots'))
                           ), # end fluidRow
                           hr(),
                           fluidRow(
                               tabsetPanel( 
-                                 tabPanel("Scatter Matrix Plots" #,
+                                 tabPanel("Scatter Matrix Plots" ,
                                            # plotOutput("scatterMatrixPlot",height="600px") 
+                                          uiOutput("pairsplot")
                                  ), # end tabPanel "Scatter Matrix Plots"
                                 
                                  tabPanel("Scatter Plots",
