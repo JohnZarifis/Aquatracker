@@ -107,8 +107,8 @@ sidebarUni <- sidebarPanel(
   radioButtons("radioDimUni", label = h3("Separate The Dataset By:"), 
                choices = list("None", "Batch", "Hatchery","Origin.Year",  "Actual.Feed",'Month.Sampling'), selected = "None"), #)
   
- 
-  actionButton(inputId = 'goUniPlot',  label = 'Refresh Univariate plots')
+  shinyFilesButton('file', 'Upload Your Data', 'Please select an Excel file', FALSE)
+  ,actionButton(inputId = 'goUniPlot',  label = 'Refresh Univariate plots')
   
 #)
 ) # end sidebarUni function

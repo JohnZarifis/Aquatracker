@@ -64,29 +64,29 @@ create_dataset <- function(dataset){
                      ,"Origin.Year" = as.character(dataset$"Year Class")
                      ,"From" = ymd(as.Date(dataset$Start.Date, origin="1899-12-30")) 
                      ,"To" = ymd(as.Date(dataset$End.Date, origin="1899-12-30"))                    
-                      ,"Month.Sampling" = month(as.Date(dataset$End.Date, origin="1899-12-30"),label = TRUE)
-                       ,"Start.Av.Weight" = dataset$'Start.Av. Weight (gr)'
-                       ,"End.Av.Weight" = dataset$'End.Av. Weight (gr)'
-                       ,"Actual.Feed" = dataset$'Feed Type' 
-                       ,"Period.Feed.Qty" = dataset$'Feed Qty (Kg)'
-                       ,"Opening.Fish.No" = dataset$'Start.FishNo' 
-                       ,"Closing.Fish.No" = dataset$'End.FishNo' 
-                       ,"Econ.FCR.Period" = dataset$'Econ FCR'
-                       ,"Bio.FCR" =  dataset$"Bio FCR"
-                       ,"Mortality.No" = dataset$'Mortality (No)' 
-                       ,"Mortality" = dataset$"Mortality (%)"
-                       ,"SFR.Period" = dataset$'SFR' 
-                       ,"SGR.Period" = dataset$'SGR' 
-                       ,"GPD" = dataset$"GPD (%)"
-                       ,"Protein" = dataset$"Protein (%)"
-                       ,"Avg.Temperature" = dataset$'Av. Temp' 
-                       ,"Days" = dataset$Days
-                       ,"Net.Growth" =dataset$"Net Growth (Kg)"
-                       ,"Average.Fish.Density" = dataset$"Average Fish Density"
-                       ,"Digestible.Protein" = dataset$"Digestible Protein (%)"
-                       ,"Fat" = dataset$"Fat (%)"
-                       ,"Animal.Protein" = dataset$"Animal Protein (%)"
-                       ,"Digestible.Energy" = dataset$"Digestible Energy (MJ/Kg)"
+                     ,"Month.Sampling" = month(as.Date(dataset$End.Date, origin="1899-12-30"),label = TRUE)
+                     ,"Start.Av.Weight" = dataset$'Start.Av. Weight (gr)'
+                     ,"End.Av.Weight" = dataset$'End.Av. Weight (gr)'
+                     ,"Actual.Feed" = dataset$'Feed Type' 
+                     ,"Period.Feed.Qty" = dataset$'Feed Qty (Kg)'
+                     ,"Opening.Fish.No" = dataset$'Start.FishNo' 
+                     ,"Closing.Fish.No" = dataset$'End.FishNo' 
+                     ,"Econ.FCR.Period" = round(dataset$'Econ FCR',digits=2)
+                     ,"Bio.FCR" =  round(dataset$"Bio FCR" , digits = 2)
+                     ,"Mortality.No" = dataset$'Mortality (No)' 
+                     ,"Mortality" = round(dataset$"Mortality (%)", digits = 2)
+                     ,"SFR.Period" = round(dataset$'SFR' , digits = 2)
+                     ,"SGR.Period" = round(dataset$'SGR' , digits = 2)
+                     ,"GPD" = round(dataset$"GPD (%)", digits = 2)
+                     ,"Protein" = dataset$"Protein (%)"
+                     ,"Avg.Temperature" = round(dataset$'Av. Temp', digits = 2)
+                     ,"Days" = dataset$Days
+                     ,"Net.Growth" =dataset$"Net Growth (Kg)"
+                     ,"Average.Fish.Density" = round(dataset$"Average Fish Density",digits = 2)
+                     ,"Digestible.Protein" = dataset$"Digestible Protein (%)"
+                     ,"Fat" = dataset$"Fat (%)"
+                     ,"Animal.Protein" = dataset$"Animal Protein (%)"
+                     ,"Digestible.Energy" = dataset$"Digestible Energy (MJ/Kg)"
                     )
                     
   

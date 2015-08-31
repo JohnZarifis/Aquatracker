@@ -13,7 +13,19 @@ data <- create_dataset(Dataset)
 #str(data)
 #summary(data)
 
+#print(fileChoose)
 
+# data <- reactive({
+#   if (is.null(fileChoose)){return(data)}
+#   fileSelected <- parseFilePaths(volumes, input$file)
+#   Market <- read_excel(as.character(fileSelected$datapath), sheet = 1 ,col_names = TRUE, na='na')
+#   colnames( Market ) <- str_replace_all(colnames( Market ), c(" " = "", "-" = ".","%"=".perc"))
+#   i <- sapply(Market, is.character)
+#   Market[i] <- lapply(Market[i], as.factor)
+#   #View(Market)
+#   
+#   return(Market)
+# })
 #---------------------------------------------------------------------------------- shinyServer.......
 #
 shinyServer(function(input, output, session){
@@ -21,8 +33,20 @@ shinyServer(function(input, output, session){
   #---------------------------------------------------------------------------------------------------
   #     Subset of Dataset 
   #---------------------------------------------------------------------------------------------------
+  volumes <- c('Project Files' = getwd())  #getVolumes() #c('R Installation'=R.home())
+  fileChoose<- shinyFileChoose(input, 'file', roots=volumes, session=session, restrictions=system.file(package='base'))
+  
   passData <- reactive({
     
+    if (isTRUE(fileChoose)) 
+    #if (is.null(fileChoose)){data <- data}
+     {
+      fileSelected <- parseFilePaths(volumes, input$file)
+      data <- read_excel(as.character(fileSelected$datapath), sheet = 1 ,col_names = TRUE, na='na')
+      colnames( data ) <- str_replace_all(colnames( data ), c(" " = "", "-" = ".","%"=".perc"))
+      i <- sapply(data, is.character)
+      data[i] <- lapply(data[i], as.factor)
+    }else {data <- data}
    
     
     if (input$groupUnit != "All"){ 
@@ -513,16 +537,7 @@ output$boxPlotPh <- renderPlot({
   }
 })
 
-#...................................................... B11
 
-#...................................................... B12
-
-
-#...................................................... B13
-
-#})
-
-#...................................................... B14
 
 
 #---------------------------------------------------------------------------------------------------
@@ -653,49 +668,15 @@ output$summary_stats_Ph <- renderTable({
 
 
 
-#---------------------------------------------------------------------------------------------------
-#     Dislpay dataset (Data)
-#---------------------------------------------------------------------------------------------------
-# # Dislpay dataset
-# output$dataset <- DT::renderDataTable({
-#   
-#   if (input$goUniPlot == 0) { 
-#     return() }
-#   else{ 
-#     isolate({  
-#       data <- passData() 
-#       DT::datatable(data, class='compact', rowname = TRUE, caption="Dataset for processing...",
-#                 filter = 'top', options=list(autoWidth=TRUE) ) 
-#     })
-#   } 
-# })
 
 
 #---------------------------------------------------------------------------------------------------
 #     Scatter Matrix Plots & Scatter Plots
 #---------------------------------------------------------------------------------------------------
-output$scatterMatrixPlot <- renderPlot({
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      
-      dim_vars = c("End.Av.Weight", "Econ.FCR.Period", "SFR.Period", "SGR.Period",  
-                   "Mortality", "Avg.Temperature", 
-                   "GPD", "Bio.FCR", "Period.Feed.Qty")
-      group_by_var = input$radioDimMulti
-      theGraph <- scatterMatrixPlot(graphData, dim_vars, group_by_var)
-      print(theGraph)
-   })
-  }
-})
 
 output$pD3 <- renderPairsD3({
-  dim_vars = c("End.Av.Weight", "Econ.FCR.Period", "SFR.Period", "SGR.Period",  
-               "Mortality", "Avg.Temperature", 
-               "GPD", "Bio.FCR", "Period.Feed.Qty")
+  dim_vars = c("End.Av.Weight", "SFR.Period", "SGR.Period",  
+               "Mortality", "Avg.Temperature", "Bio.FCR","Average.Fish.Density" )
   pairsD3(passData()[,dim_vars], group = group(),  labels = NULL)
 })
 
@@ -708,7 +689,7 @@ group = reactive({
 
 
 output$pairsplot = renderUI({
-  pairsD3Output("pD3",width = "800px", height = "800px")
+  pairsD3Output("pD3",width = "1200px", height = "1200px")
 })
 
 
@@ -751,7 +732,7 @@ output$scatterPlot.EndAvWeight.PeriodSFR <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="End.Av.Weight", y="SFR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -780,7 +761,7 @@ else{
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="End.Av.Weight", y="SGR.Period", colour=input$radioDimMulti,
-                  size = "Closing.Biomass", regr.method="loess") 
+                  size = "Closing.Fish.No", regr.method="loess") 
       print(p)
       })
     }
@@ -801,34 +782,8 @@ output$cor.stats.EndAvWeight.PeriodSGR <- renderPrint({
   }
 })
 #.......................................................... S4
-output$scatterPlot.EndAvWeight.AvgTemp <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="Avg.Temperature", y="End.Av.Weight", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.EndAvWeight.AvgTemp <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-          d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=Avg.Temperature, y=End.Av.Weight))
-      }else{
-      d <- data.frame("Pearson Correlation" = cor(x=data$Avg.Temperature, y=data$End.Av.Weight))
-      }
-      return( d ) 
-    })  
-  }
-})
+
+
 #.......................................................... S5
 output$scatterPlot.PeriodEcon.FCR.PeriodSFR <- renderPlot({ 
   #Re-run when button is clicked
@@ -838,7 +793,7 @@ output$scatterPlot.PeriodEcon.FCR.PeriodSFR <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="Econ.FCR.Period", y="SFR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -867,7 +822,7 @@ output$scatterPlot.PeriodEcon.FCR.PeriodSGR <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="Econ.FCR.Period", y="SGR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -896,7 +851,7 @@ output$scatterPlot.PeriodFCR.AvgTemp <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="Avg.Temperature", y="Econ.FCR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -925,7 +880,7 @@ output$scatterPlot.PeriodSFR.PeriodSGR <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="SFR.Period", y="SGR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -954,7 +909,7 @@ output$scatterPlot.PeriodSFR.AvgTemp <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="Avg.Temperature", y="SFR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -983,7 +938,7 @@ output$scatterPlot.PeriodSGR.AvgTemp <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="Avg.Temperature", y="SGR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -1012,7 +967,7 @@ output$scatterPlot.EconFCR.EndAvWeight <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="End.Av.Weight", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -1041,7 +996,7 @@ output$scatterPlot.EconFCR.FCRPeriod <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="Econ.FCR.Period", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -1070,7 +1025,7 @@ output$scatterPlot.EconFCR.SFRPeriod <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="SFR.Period", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -1099,7 +1054,7 @@ output$scatterPlot.EconFCR.SGRPeriod <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="SGR.Period", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -1128,7 +1083,7 @@ output$scatterPlot.EconFCR.AvgTemp <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="Avg.Temperature", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -1159,7 +1114,7 @@ output$scatterPlot.EconFCR.Ph <- renderPlot({
     isolate({    
       graphData <- passData()
       p <- scatterPlot(graphData, x="GPD", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Biomass", regr.method="loess") 
+                       size = "Closing.Fish.No", regr.method="loess") 
       print(p)
     })
   }
@@ -1186,6 +1141,10 @@ output$cor.stats.EconFCR.Ph <- renderPrint({
 #---------------------------------------------------------------------------------------------------
 
 datasetMD <- reactive({
+  dim_vars = c("End.Av.Weight", "SFR.Period", "SGR.Period",  
+               "Mortality", "Avg.Temperature", "Bio.FCR",
+               "Average.Fish.Density","Hatchery",'Batch',"Origin.Year"
+               ,"From","To","Month.Sampling","Start.Av.Weight","End.Av.Weight","Actual.Feed","Period.Feed.Qty" )
   data <- passData()
 #  data <- data[sample(nrow(data), input$sampleSize),]
   data <- data[  (data$From >= ymd(input$MD.dateRangeFrom[1]) & data$From <= ymd(input$MD.dateRangeFrom[2])) 
@@ -1238,22 +1197,6 @@ output$plotDashboard <- renderPlot({
   
 })
 
-#---------------------------------------------------------------------------------------------------
-#     Dislpay Pivot Table (Data)
-#---------------------------------------------------------------------------------------------------
-                  
-
-# #---------------------------------------------------------------------------------------------------
-# #     Dislpay HeatMap (Data)
-# #---------------------------------------------------------------------------------------------------
-# 
-
-
-
-
-#---------------------------------------------------------------------------------------------------
-#     Multidimensional Interactive Dashboard
-#---------------------------------------------------------------------------------------------------
 
 
 

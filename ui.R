@@ -48,10 +48,8 @@ shinyUI(
                                                     fluidRow( plotOutput("histPlotPeriod.Day.Degrees")),
                                                     fluidRow( plotOutput("histPlotAvg.Temperature")),
                                                     fluidRow( plotOutput("histPlotPh")),
-                                                    fluidRow( plotOutput("histPlotCAUDAL.O3")),
-                                                    fluidRow( plotOutput("histPlotWATER.RENEWAL")),
-                                                    fluidRow( plotOutput("histPlotNH3")),
-                                                    fluidRow( plotOutput("histPlotNO2")))
+                                                    fluidRow( plotOutput("histPlotCAUDAL.O3"))
+                                                    )
                                         )
 ), # end tabPanel Histograms 
                                         tabPanel("Density Plots",
@@ -140,9 +138,8 @@ shinyUI(
               ), # end tabPanel "Univariate Statistics"
 
 # ---------------------------------------------------------- Second MenuPage
-            tabPanel(" Multivariate Statistics ", id="MenuPage_2", 
-                fluidPage( #theme = shinytheme("cerulean"),
-                          #titlePanel("Exploratory Data Analysis"),
+            tabPanel("Scatter Matrix Plots", id="MenuPage_2", 
+                fluidPage( 
                           fluidRow( column(9, radioButtons("radioDimMulti", label = h3("Separate The Dataset By:"), 
                                                       choices = list("None",  "Batch", "Unit", "Hatchery",
                                                        "Origin.Year","Feed Type"="Actual.Feed"), selected = "None", inline = TRUE)),
@@ -150,13 +147,12 @@ shinyUI(
                           ), # end fluidRow
                           hr(),
                           fluidRow(
-                              tabsetPanel( 
-                                 tabPanel("Scatter Matrix Plots" ,
-                                           # plotOutput("scatterMatrixPlot",height="600px") 
-                                          uiOutput("pairsplot")
-                                 ), # end tabPanel "Scatter Matrix Plots"
+                            uiOutput("pairsplot")
+                            )
+                          )
+                ),# end tabPanel "Scatter Matrix Plots"
                                 
-                                 tabPanel("Scatter Plots",
+              tabPanel("Scatter Plots",id="MenuPage_3",
                                          wellPanel(
                                          fluidRow(column(9, plotOutput("scatterPlot.EndAvWeight.PeriodFCR")),
                                                   column(3, verbatimTextOutput("cor.stats.EndAvWeight.PeriodFCR")) 
@@ -242,16 +238,15 @@ shinyUI(
                                            )
                                          )
                                        ) # end tabPanel "Scatter Plots"
-                              ) # end tabsetPanel
-                          ) # end fluidRow
-                    ) # end fluidPage
-            ),  # end tabPanel " Multivariate Statistics "  
+                              #) # end tabsetPanel
+                       #   ) # end fluidRow
+                   # ) # end fluidPage
+          #  ),  # end tabPanel " Multivariate Statistics "  
 
 #---------------------------------------------------------- Third MenuPage
-            navbarMenu("Tools",
-                       tabPanel("Dashboard ", id="MenuPage_3d", 
+                       ,tabPanel("Dashboard ", id="MenuPage_4", 
                                 fluidPage( #theme = shinytheme("cerulean"),
-                                  plotOutput('plotDashboard',height="600px"),
+                                  plotOutput('plotDashboard',height="800px"),
                                   hr(),
                                   fluidRow(
                                     column(3,
@@ -301,18 +296,9 @@ shinyUI(
                                 ) # end fluidPage
                        )  # end tabPanel Multidimensional Dashboard    
                        
-                       # pivot Table
-                       
+                      
                    
-
                                  
-            ) # end navbarMenu Tools
-            
-  
-
-
-
-
 
   ) # end navbarPage
 ) # end shinyUI                                               
