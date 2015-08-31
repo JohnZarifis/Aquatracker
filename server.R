@@ -9,7 +9,7 @@
 #pathname = paste(getwd(), "aquaData.xlsx", sep="/")
 #data <- read_excel(pathname, sheet = 1 ,col_names = TRUE, na='na')
 data <- create_dataset(Dataset)
-View(data) # for debugging reasons
+#View(data) # for debugging reasons
 #str(data)
 #summary(data)
 
@@ -127,18 +127,18 @@ output$histPlotAvWeight <- renderPlot({
   }
 })
 #...................................................... H2
-output$histPlotAvWeightDeviation <- renderPlot({ 
-  # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      theGraph <- histPlot(graphData, x="Period.Feed.Qty", nbins = input$numbins, group_var=input$radioDimUni )
-      print(theGraph)
-    })
-  }
-})
+# output$histPlotAvWeightDeviation <- renderPlot({ 
+#   # Re-run when button is clicked
+#   if (input$goUniPlot == 0){
+#     return() }
+#   else{ 
+#     isolate({    
+#       graphData <- passData()
+#       theGraph <- histPlot(graphData, x="Period.Feed.Qty", nbins = input$numbins, group_var=input$radioDimUni )
+#       print(theGraph)
+#     })
+#   }
+# })
 
 #...................................................... H3
 output$histPlotPeriod.FCR <- renderPlot({ 
@@ -245,17 +245,6 @@ output$histPlotPh <- renderPlot({
     })
   }
 })
-
-#...................................................... H11
-
-#...................................................... H12
-
-
-#...................................................... H13
-
-
-#...................................................... H14
-
 
 
 #---------------------------------------------------------------------------------------------------

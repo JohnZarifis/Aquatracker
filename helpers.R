@@ -7,8 +7,6 @@ library("shinyFiles")
 library("shinyBS")
 library("lubridate")
 library("htmltools")
-library("d3heatmap")
-library("DT") 
 #library("rpivotTable") #devtools::install_github("smartinsightsfromdata/rpivotTable")
 library("htmlwidgets")
 library("RColorBrewer") 
@@ -23,20 +21,13 @@ library("plyr")
 library("dplyr")
 library("GGally")
 library("e1071")
-#library("caret")
-#library("pROC")
-#library("glmnet")
-#library("rpart")
-#library("party")
-#library("rpart.plot")
-library("partykit")
+
+
 library("Hmisc")
 library("effects")
 library("car")
 library("relaimpo")
-library("ROCR")
 library("fpc")
-library("randomForest")
 library("maptree")
 library("nlme")
 library("ggthemr") # devtools::install_github('ggthemr', 'cttobin')
@@ -71,7 +62,6 @@ create_dataset <- function(dataset){
                      ,"Period.Feed.Qty" = dataset$'Feed Qty (Kg)'
                      ,"Opening.Fish.No" = dataset$'Start.FishNo' 
                      ,"Closing.Fish.No" = dataset$'End.FishNo' 
-<<<<<<< HEAD:helpers.R
                      ,"Econ.FCR.Period" = round(dataset$'Econ FCR',digits=2)
                      ,"Bio.FCR" =  round(dataset$"Bio FCR" , digits = 2)
                      ,"Mortality.No" = dataset$'Mortality (No)' 
@@ -84,7 +74,6 @@ create_dataset <- function(dataset){
                      ,"Days" = dataset$Days
                      ,"Net.Growth" =dataset$"Net Growth (Kg)"
                      ,"Average.Fish.Density" = round(dataset$"Average Fish Density",digits = 2)
-=======
                      ,"Econ.FCR.Period" = dataset$'Econ FCR'
                      ,"Bio.FCR" =  dataset$"Bio FCR"
                      ,"Mortality.No" = dataset$'Mortality (No)' 
@@ -97,7 +86,6 @@ create_dataset <- function(dataset){
                      ,"Days" = dataset$Days
                      ,"Net.Growth" =dataset$"Net Growth (Kg)"
                      ,"Average.Fish.Density" = dataset$"Average Fish Density"
->>>>>>> origin/master:www/helpers.R
                      ,"Digestible.Protein" = dataset$"Digestible Protein (%)"
                      ,"Fat" = dataset$"Fat (%)"
                      ,"Animal.Protein" = dataset$"Animal Protein (%)"

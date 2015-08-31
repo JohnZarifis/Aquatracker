@@ -1,22 +1,7 @@
-### Version Sea-8 (Sol)
+### Version Aquasmart (data)
 
 source("SidebarUi.R")
 
-#-------------------------------------------------------------------------------
-# sidebarMulti <- sidebarPanel(
-#   
-#   img(src="Aquamanager-logo.png"),
-#   
-#   radioButtons("radioDimMulti", label = h3("Separate The Dataset By:"), 
-#                choices = list("Orientation", "System", 'Section', "Hatchery",
-#                               "Origin.Month", "Origin.Year"), selected = "Orientation", inline = TRUE),
-#   
-#    actionButton(inputId = 'goMultiPlot',  label = 'Refresh Multivariate plots')
-#  
-# ) # end sidebarMulti function
-
-#----------------------------------------------------
-# 
 shinyUI( 
   navbarPage( theme = "bootstrap.css",
               "Aqua Tracker", 
@@ -36,8 +21,9 @@ shinyUI(
                                                                                    value = 50, step=1))) 
                                                      ,bsCollapse(id = "collapseHistPlot" , # open = "Av. Weight", 
                                                              bsCollapsePanel("Av. Weight", style = "primary" ,
-                                                    fluidRow(plotOutput("histPlotAvWeight")),
-                                                    fluidRow(plotOutput("histPlotAvWeightDeviation"))),
+                                                    fluidRow(plotOutput("histPlotAvWeight"))#,
+                                                    # fluidRow(plotOutput("histPlotAvWeightDeviation"))
+                                                    ),
                                                              bsCollapsePanel("KPI's", style = "primary" ,
                                                     fluidRow( plotOutput("histPlotPeriod.FCR")),
                                                     fluidRow( plotOutput("histPlotEcon.FCR")),
@@ -128,9 +114,7 @@ shinyUI(
                                                     tableOutput("summary_stats_NO2")
                                                  
                                         )#, # end tabPanel Summary Statistics
-                                      #  tabPanel("Data", 
-                                      #              DT::dataTableOutput("dataset") 
-                                      #  )
+                                   
                                      ) # end tabsetPanel
                                     )# end mainPanel
                                   ) # end sidebarLayout

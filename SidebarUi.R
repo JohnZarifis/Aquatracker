@@ -30,7 +30,7 @@ sidebarUni <- sidebarPanel(
                  min = min( ymd(df$From)-days(0) ),
                  max = max( ymd(df$From)+days(1)),
                  separator = " to ", format = "dd/mm/yyyy",
-                 startview = 'year', language = 'el', weekstart = 0
+                 startview = 'year', language = 'en', weekstart = 0
   ),
   dateRangeInput('dateRangeTo',
                  label = paste(' To: '),
@@ -39,7 +39,7 @@ sidebarUni <- sidebarPanel(
                  min = min( ymd(df$To)-days(1) ),
                  max = max( ymd(df$To)+days(1) ),
                  separator = " to ", format = "dd/mm/yyyy",
-                 startview = 'year', language = 'el', weekstart = 0
+                 startview = 'year', language = 'en', weekstart = 0
   #)
   ),
   
