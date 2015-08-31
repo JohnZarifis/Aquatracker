@@ -114,7 +114,28 @@ shinyUI(
                                                     tableOutput("summary_stats_NO2")
                                                  
                                         )#, # end tabPanel Summary Statistics
-                                   
+                                     ,tabPanel("ScatterPlots",
+                                               
+                                               column(3, 
+                                                      selectInput('x', 'X Axis', choices=names(df), selected="To"),
+                                                      selectInput('y', 'Y Axis', choices=names(df), selected="End.Av.Weight")
+                                                     
+                                               ),
+                                               column(3,
+                                                      selectInput('facet_row', 'Multiple Rows',
+                                                                  c(None='.', names(df[sapply(df, is.factor)]))),
+                                                      selectInput('facet_col', 'Multiple Columns',
+                                                                  c(None='.', names(df[sapply(df, is.factor)])))
+                                               ),
+                                               column(3,
+                                                      checkboxInput('xmeans', 'X-axis mean'),
+                                                      checkboxInput('ymeans', 'Y-axis mean'),
+                                                      checkboxInput('smooth', 'Smooth')
+                                                      
+                                               ),
+                                               column(3, verbatimTextOutput("cor"))
+                                               
+                                               ,plotOutput('plotDashboard',height="800px"))
                                      ) # end tabsetPanel
                                     )# end mainPanel
                                   ) # end sidebarLayout
@@ -131,7 +152,7 @@ shinyUI(
                           ), # end fluidRow
                           hr(),
                           fluidRow(
-                            uiOutput("pairsplot")
+                            #uiOutput("pairsplot")
                             )
                           )
                 ),# end tabPanel "Scatter Matrix Plots"
@@ -228,57 +249,7 @@ shinyUI(
           #  ),  # end tabPanel " Multivariate Statistics "  
 
 #---------------------------------------------------------- Third MenuPage
-                       ,tabPanel("Dashboard ", id="MenuPage_4", 
-                                fluidPage( #theme = shinytheme("cerulean"),
-                                  plotOutput('plotDashboard',height="800px"),
-                                  hr(),
-                                  fluidRow(
-                                    column(3,
-                                           h4("Multidimensional Exploration"),
-                                           dateRangeInput('MD.dateRangeFrom',
-                                                          label = paste(' From: '),
-                                                          start = min( ymd(df$From)-days(0) ), 
-                                                          end = max( ymd(df$From)+days(1) ),
-                                                          min = min( ymd(df$From)-days(0) ),
-                                                          max = max( ymd(df$From)+days(1) ),
-                                                          separator = " to ", format = "dd/mm/yyyy",
-                                                          startview = 'year', language = 'pt', weekstart = 0
-                                           ),
-                                           br(),
-                                           dateRangeInput('MD.dateRangeTo',
-                                                          label = paste(' To: '),
-                                                          start = min( ymd(df$To)-days(1) ), 
-                                                          end = max( ymd(df$To)+days(1) ),
-                                                          min = min( ymd(df$To)-days(1) ),
-                                                          max = max( ymd(df$To)+days(1) ),
-                                                          separator = " to ", format = "dd/mm/yyyy",
-                                                          startview = 'year', language = 'pt', weekstart = 0
-                                           )
-                                    ),
-                                    column(3, 
-                                           selectInput('x', 'X', choices=names(df), selected="To"),
-                                           selectInput('y', 'Y', choices=names(df), selected="End.Av.Weight"),
-                                           selectInput('color', 'Color', choices=c('None', names(df)))
-                                    ),
-                                    column(3,
-                                           selectInput('facet_row', 'Facet Row',
-                                                       c(None='.', names(df[sapply(df, is.factor)]))),
-                                           selectInput('facet_col', 'Facet Column',
-                                                       c(None='.', names(df[sapply(df, is.factor)])))
-                                    ),
-                                    column(3,
-                                           checkboxInput('xmeans', 'X-axis mean'),
-                                           checkboxInput('ymeans', 'Y-axis mean'),
-                                           checkboxInput('total.xmeans', 'Total X-axis mean'),
-                                           checkboxInput('total.ymeans', 'Total Y-axis mean'),
-                                           checkboxInput('smooth', 'Smooth'),
-                                           checkboxInput('comp.ranges', 'Compare Ranges'),
-                                           checkboxInput('benchmarker', 'Benchmarker')
-                                    ),
-                                    fluidRow(column(12, hr()))
-                                  ) # end fluidRow
-                                ) # end fluidPage
-                       )  # end tabPanel Multidimensional Dashboard    
+                       
                        
                       
                    

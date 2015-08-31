@@ -13,19 +13,7 @@ data <- create_dataset(Dataset)
 #str(data)
 #summary(data)
 
-#print(fileChoose)
 
-# data <- reactive({
-#   if (is.null(fileChoose)){return(data)}
-#   fileSelected <- parseFilePaths(volumes, input$file)
-#   Market <- read_excel(as.character(fileSelected$datapath), sheet = 1 ,col_names = TRUE, na='na')
-#   colnames( Market ) <- str_replace_all(colnames( Market ), c(" " = "", "-" = ".","%"=".perc"))
-#   i <- sapply(Market, is.character)
-#   Market[i] <- lapply(Market[i], as.factor)
-#   #View(Market)
-#   
-#   return(Market)
-# })
 #---------------------------------------------------------------------------------- shinyServer.......
 #
 shinyServer(function(input, output, session){
@@ -663,465 +651,36 @@ output$summary_stats_Ph <- renderTable({
 #     Scatter Matrix Plots & Scatter Plots
 #---------------------------------------------------------------------------------------------------
 
-output$pD3 <- renderPairsD3({
-  dim_vars = c("End.Av.Weight", "SFR.Period", "SGR.Period",  
-               "Mortality", "Avg.Temperature", "Bio.FCR","Average.Fish.Density" )
-  pairsD3(passData()[,dim_vars], group = group(),  labels = NULL)
-})
-
-group = reactive({
-  if(input$radioDimMulti=="None"){
-    return(NULL)
-    
-  } else return(passData()[,input$radioDimMulti])
-})
-
-
-output$pairsplot = renderUI({
-  pairsD3Output("pD3",width = "1200px", height = "1200px")
-})
-
-
- 
-#...................................................... S1
-output$scatterPlot.EndAvWeight.PeriodFCR <- renderPlot({ 
-#Re-run when button is clicked
-if (input$goMultiPlot == 0){ 
-  return() }
-else{ 
-  isolate({    
-    graphData <- passData()
-    p <- scatterPlot(graphData, x="End.Av.Weight", y="Econ.FCR.Period", colour=input$radioDimMulti,
-                     size = "Closing.Fish.No", regr.method="loess") 
-   print(p)
-  })
- }
-})
-output$cor.stats.EndAvWeight.PeriodFCR <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-          data <- passData()
-          if ( input$radioDimMulti != "None"){
-            d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=End.Av.Weight, y=Econ.FCR.Period))
-          }else{
-            d <- data.frame("Pearson Correlation" = cor(x=data$End.Av.Weight, y=data$Econ.FCR.Period))
-          }
-          return( d ) 
-    })  
-  }
-})  
-#.......................................................... S2
-output$scatterPlot.EndAvWeight.PeriodSFR <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="End.Av.Weight", y="SFR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.EndAvWeight.PeriodSFR <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){
-        d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=End.Av.Weight, y=SFR.Period))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$End.Av.Weight, y=data$SFR.Period))
-      }
-      return( d ) 
-    })  
-  }
-})
-#.......................................................... S3
-output$scatterPlot.EndAvWeight.PeriodSGR <- renderPlot({ 
-#Re-run when button is clicked
-if (input$goMultiPlot == 0){ 
-    return() }
-else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="End.Av.Weight", y="SGR.Period", colour=input$radioDimMulti,
-                  size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-      })
-    }
-})
-output$cor.stats.EndAvWeight.PeriodSGR <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){
-          d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=End.Av.Weight, y=SGR.Period))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$End.Av.Weight, y=data$SGR.Period))
-      }
-      return( d ) 
-    })  
-  }
-})
-#.......................................................... S4
+# output$pD3 <- renderPairsD3({
+#   dim_vars = c("End.Av.Weight", "SFR.Period", "SGR.Period",  
+#                "Mortality", "Avg.Temperature", "Bio.FCR","Average.Fish.Density" )
+#   pairsD3(passData()[,dim_vars], group = group(),  labels = NULL)
+# })
+# 
+# group = reactive({
+#   if(input$radioDimMulti=="None"){
+#     return(NULL)
+#     
+#   } else return(passData()[,input$radioDimMulti])
+# })
+# 
+# 
+# output$pairsplot = renderUI({
+#   pairsD3Output("pD3",width = "1200px", height = "1200px")
+# })
 
 
-#.......................................................... S5
-output$scatterPlot.PeriodEcon.FCR.PeriodSFR <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="Econ.FCR.Period", y="SFR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.PeriodEcon.FCR.PeriodSFR <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
+output$cor <- renderPrint({
+  
       data <- passData()
-      if ( input$radioDimMulti != "None"){   
-          d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=Econ.FCR.Period, y=SFR.Period))
-      }else{
-          d <- data.frame("Pearson Correlation" = cor(x=data$Econ.FCR.Period, y=data$SFR.Period))
-      }
-      return( d ) 
-    })  
-  }
-})
-#.......................................................... S6
-output$scatterPlot.PeriodEcon.FCR.PeriodSGR <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="Econ.FCR.Period", y="SGR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.PeriodEcon.FCR.PeriodSGR <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-          d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=Econ.FCR.Period, y=SGR.Period))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$Econ.FCR.Period, y=data$SGR.Period))
-      }
-      return( d )
-    })  
-  }
-})
-#.......................................................... S7
-output$scatterPlot.PeriodFCR.AvgTemp <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="Avg.Temperature", y="Econ.FCR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.PeriodFCR.AvgTemp <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-          d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=Avg.Temperature, y=Econ.FCR.Period))
-      }else{
-          d <- data.frame("Pearson Correlation" = cor(x=data$Avg.Temperature, y=data$Econ.FCR.Period))
-      }
-      return( d ) 
-    })  
-  }
-})
-#.......................................................... S8
-output$scatterPlot.PeriodSFR.PeriodSGR <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="SFR.Period", y="SGR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.PeriodSFR.PeriodSGR <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-        d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=SFR.Period, y=SGR.Period))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$SFR.Period, y=data$SGR.Period))
-      }
-      return( d )      
-    })  
-  }
-})
-#.......................................................... S9
-output$scatterPlot.PeriodSFR.AvgTemp <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="Avg.Temperature", y="SFR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.PeriodSFR.AvgTemp <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-        d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=Avg.Temperature, y=SFR.Period))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$Avg.Temperature, y=data$SFR.Period))
-      }
-      return( d )      
-    })  
-  }
-})
-#.......................................................... S10
-output$scatterPlot.PeriodSGR.AvgTemp <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="Avg.Temperature", y="SGR.Period", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.PeriodSGR.AvgTemp <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-        d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=Avg.Temperature, y=SGR.Period))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$Avg.Temperature, y=data$SGR.Period))
-      }
-      return( d ) 
-    })  
-  }
-})
-#.......................................................... S11
-output$scatterPlot.EconFCR.EndAvWeight <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="End.Av.Weight", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.EconFCR.EndAvWeight <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-        d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=End.Av.Weight, y=LTD.Econ.FCR))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$End.Av.Weight, y=data$LTD.Econ.FCR))
-      }
-      return( d ) 
-    })  
-  }
-})
-#.......................................................... S12
-output$scatterPlot.EconFCR.FCRPeriod <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="Econ.FCR.Period", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.EconFCR.FCRPeriod <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-        d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=Econ.FCR.Period, y=LTD.Econ.FCR))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$Econ.FCR.Period, y=data$LTD.Econ.FCR))
-      }
-      return( d ) 
-    })  
-  }
-})
-#.......................................................... S13
-output$scatterPlot.EconFCR.SFRPeriod <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="SFR.Period", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.EconFCR.SFRPeriod <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-        d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=SFR.Period, y=LTD.Econ.FCR))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$SFR.Period, y=data$LTD.Econ.FCR))
-      }
-      return( d ) 
-    })  
-  }
-})
-#.......................................................... S14
-output$scatterPlot.EconFCR.SGRPeriod <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="SGR.Period", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.EconFCR.SGRPeriod <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-        d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=SGR.Period, y=LTD.Econ.FCR))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$SGR.Period, y=data$LTD.Econ.FCR))
-      }
-      return( d ) 
-    })  
-  }
-})
-#.......................................................... S15
-output$scatterPlot.EconFCR.AvgTemp <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="Avg.Temperature", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.EconFCR.AvgTemp <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-        d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=Avg.Temperature, y=LTD.Econ.FCR))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$Avg.Temperature, y=data$LTD.Econ.FCR))
-      }
-      return( d ) 
-    })  
-  }
-})
-
-
-#.......................................................... S16
-output$scatterPlot.EconFCR.Ph <- renderPlot({ 
-  #Re-run when button is clicked
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      p <- scatterPlot(graphData, x="GPD", y="Average.Fish.Density", colour=input$radioDimMulti,
-                       size = "Closing.Fish.No", regr.method="loess") 
-      print(p)
-    })
-  }
-})
-output$cor.stats.EconFCR.Ph <- renderPrint({
-  if (input$goMultiPlot == 0){ 
-    return() }
-  else{ 
-    isolate({    
-      data <- passData()
-      if ( input$radioDimMulti != "None"){   
-        d <- ddply(data, input$radioDimMulti, summarise, "Pearson Correlation" = cor(x=Ph, y=LTD.Econ.FCR))
-      }else{
-        d <- data.frame("Pearson Correlation" = cor(x=data$Ph, y=data$LTD.Econ.FCR))
-      }
-      return( d ) 
-    })  
-  }
+#       if ( input$radioDimUni != 'None'){   
+#         d <- ddply(data, input$radioDimUni, summarise, "Pearson Correlation" = cor(x=data$input$x, y=data$input$y))
+#       }else{
+#         d <- data.frame("Pearson Correlation" = cor(x=data$input$x, y=data$input$y))
+#       }
+      return( input$x ) 
+     
+  
 })
 
 
@@ -1130,24 +689,18 @@ output$cor.stats.EconFCR.Ph <- renderPrint({
 #---------------------------------------------------------------------------------------------------
 
 datasetMD <- reactive({
-  dim_vars = c("End.Av.Weight", "SFR.Period", "SGR.Period",  
-               "Mortality", "Avg.Temperature", "Bio.FCR",
-               "Average.Fish.Density","Hatchery",'Batch',"Origin.Year"
-               ,"From","To","Month.Sampling","Start.Av.Weight","End.Av.Weight","Actual.Feed","Period.Feed.Qty" )
+  
   data <- passData()
-#  data <- data[sample(nrow(data), input$sampleSize),]
-  data <- data[  (data$From >= ymd(input$MD.dateRangeFrom[1]) & data$From <= ymd(input$MD.dateRangeFrom[2])) 
-               & (data$To >= ymd(input$MD.dateRangeTo[1]) & data$To <= ymd(input$MD.dateRangeTo[2])) , ]
   
 })
 
 output$plotDashboard <- renderPlot({
  
-  dsMD <- datasetMD()
+  dsMD <- passData()
   p <- ggplot(dsMD, aes_string(x=input$x, y=input$y)) + geom_point(size=2.5) 
   
-  if (input$color != 'None')
-    p <- p + aes_string(color=input$color)
+  if (input$radioDimUni != 'None')
+    p <- p + aes_string(color=input$radioDimUni)
   
   facets <- paste(input$facet_row, '~', input$facet_col)
   if (facets != '. ~ .')
@@ -1159,29 +712,10 @@ output$plotDashboard <- renderPlot({
   if (input$ymeans)
       p <- p + geom_line( stat = "hline", yintercept="mean")
   
-  if (input$total.xmeans)
-  { 
-    avgx = mean(as.numeric(dsMD[,input$x]))
-    p <- p + geom_vline( xintercept=avgx, color="darkred", linetype="dashed", size=1.5)
-  }
-  if (input$total.ymeans)
-  { 
-    avgy = mean(as.numeric(dsMD[,input$y]))
-    p <- p + geom_hline( yintercept=avgy, color="darkred", linetype="dashed", size=1.5)
-  }
+ 
   if (input$smooth)
       p <- p + geom_smooth()
 
-  if ( input$comp.ranges)
-  {   
-    smtr <- stat_summary(fun.data ="mean_cl_boot", geom="crossbar", conf.int=0.95, width=0.3, B=1000, na.rm=T, reps=F) 
-    p <- p + smtr
-  }    
-  
-  if ( input$benchmarker)  
-  {
-    p <- p + geom_abline(intercept=0, slope=1)
-  }
   print(p)
   
 })
