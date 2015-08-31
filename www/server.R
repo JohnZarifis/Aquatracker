@@ -9,7 +9,7 @@
 #pathname = paste(getwd(), "aquaData.xlsx", sep="/")
 #data <- read_excel(pathname, sheet = 1 ,col_names = TRUE, na='na')
 data <- create_dataset(Dataset)
-#View(data) # for debugging reasons
+View(data) # for debugging reasons
 #str(data)
 #summary(data)
 
