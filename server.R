@@ -129,7 +129,7 @@ output$histPlotAvWeight <- renderPlot({
 # })
 
 #...................................................... H3
-output$histPlotPeriod.FCR <- renderPlot({ 
+output$histPlotEcon.FCR.Period <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -142,7 +142,7 @@ output$histPlotPeriod.FCR <- renderPlot({
   }
 })
 #...................................................... H4
-output$histPlotEcon.FCR <- renderPlot({ 
+output$histPlotBio.FCR <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -194,7 +194,7 @@ output$histPlotMortality <- renderPlot({
   }
 })
 #...................................................... H8
-output$histPlotPeriod.Day.Degrees <- renderPlot({ 
+output$histPlotAverage.Fish.Density <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -221,7 +221,7 @@ output$histPlotAvg.Temperature <- renderPlot({
 })
 
 #...................................................... H10
-output$histPlotPh <- renderPlot({ 
+output$histPlotGPD <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }

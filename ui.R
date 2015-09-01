@@ -7,7 +7,7 @@ shinyUI(
               "Aqua Tracker", 
               
               #---------------------------------------------------------- First MenuPage
-              tabPanel(" Univariate Statistics ", id="MenuPage_1", 
+              tabPanel("Statistics ", id="MenuPage_1", 
                        fluidPage( theme = "bootstrap.css", 
                                  # titlePanel("Exploratory Data Analysis"),
                                   sidebarLayout(
@@ -19,28 +19,34 @@ shinyUI(
                                                     ,fluidRow(column(3, sliderInput("numbins", "Number of bins:", 
                                                                                    min = 5, max = 100, 
                                                                                    value = 50, step=1))) 
-                                                     ,bsCollapse(id = "collapseHistPlot" , # open = "Av. Weight", 
+                                                     ,bsCollapse(id = "collapseHistPlot" ,  open = "Av. Weight", 
                                                              bsCollapsePanel("Av. Weight", style = "primary" ,
                                                     fluidRow(plotOutput("histPlotAvWeight"))#,
                                                     # fluidRow(plotOutput("histPlotAvWeightDeviation"))
                                                     ),
                                                              bsCollapsePanel("KPI's", style = "primary" ,
-                                                    fluidRow( plotOutput("histPlotPeriod.FCR")),
-                                                    fluidRow( plotOutput("histPlotEcon.FCR")),
+                                                    fluidRow( plotOutput("histPlotEcon.FCR.Period")),
+                                                    fluidRow( plotOutput("histPlotBio.FCR")),
                                                     fluidRow( plotOutput("histPlotPeriod.SFR")),
                                                     fluidRow( plotOutput("histPlotPeriod.SGR")),
+                                                    fluidRow( plotOutput("histPlotGPD")),
                                                     fluidRow( plotOutput("histPlotMortality"))),
                                                              bsCollapsePanel("Envirnomental", style = "primary" ,
-                                                    fluidRow( plotOutput("histPlotPeriod.Day.Degrees")),
-                                                    fluidRow( plotOutput("histPlotAvg.Temperature")),
-                                                    fluidRow( plotOutput("histPlotPh")),
-                                                    fluidRow( plotOutput("histPlotCAUDAL.O3"))
+                                                    fluidRow( plotOutput("histPlotAverage.Fish.Density")),
+                                                    fluidRow( plotOutput("histPlotAvg.Temperature"))
+                                                    
+                                                    
                                                     )
                                         )
 ), # end tabPanel Histograms 
-                                        tabPanel("Density Plots",
-                                                   fluidRow(plotOutput("densPlotAvWeight")),
-                                                   fluidRow(plotOutput("densPlotAvWeightDeviation")),
+                                        tabPanel("Density Plots"
+                                                 ,bsCollapse(id = "collapseDensPlot" ,  open = "Av. Weight", 
+                                                             bsCollapsePanel("Av. Weight", style = "primary" 
+                                                 
+                                                  ,fluidRow(plotOutput("densPlotAvWeight"))
+                                                  ),
+                                                            bsCollapsePanel("KPI's", style = "primary" 
+                                                   ,fluidRow(plotOutput("densPlotAvWeightDeviation")),
                                                    fluidRow(plotOutput("densPlotPeriod.FCR")),
                                                    fluidRow(plotOutput("densPlotEcon.FCR")),
                                                    fluidRow(plotOutput("densPlotPeriod.SFR")),
@@ -143,118 +149,24 @@ shinyUI(
               ), # end tabPanel "Univariate Statistics"
 
 # ---------------------------------------------------------- Second MenuPage
-            tabPanel("Scatter Matrix Plots", id="MenuPage_2", 
+            tabPanel("Help", id="MenuPage_2", 
                 fluidPage( 
-                          fluidRow( column(9, radioButtons("radioDimMulti", label = h3("Separate The Dataset By:"), 
-                                                      choices = list("None",  "Batch", "Unit", "Hatchery",
-                                                       "Origin.Year","Feed Type"="Actual.Feed"), selected = "None", inline = TRUE)),
-                                    column(3, actionButton(inputId = 'goMultiPlot',  label = 'Refresh Multivariate plots'))
+                  tabsetPanel(
+                    tabPanel("Help"
+                          ,fluidRow( 
                           ), # end fluidRow
                           hr(),
                           fluidRow(
                             #uiOutput("pairsplot")
                             )
-                          )
-                ),# end tabPanel "Scatter Matrix Plots"
+                          ) # end tabpanel help
+                    ,tabPanel("Test",
+                              fluidRow(
                                 
-              tabPanel("Scatter Plots",id="MenuPage_3",
-                                         wellPanel(
-                                         fluidRow(column(9, plotOutput("scatterPlot.EndAvWeight.PeriodFCR")),
-                                                  column(3, verbatimTextOutput("cor.stats.EndAvWeight.PeriodFCR")) 
-                                                 )
-                                         ),  
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.EndAvWeight.PeriodSFR")),
-                                                    column(3, verbatimTextOutput("cor.stats.EndAvWeight.PeriodSFR")) 
-                                           )
-                                         ),  
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.EndAvWeight.PeriodSGR")),
-                                                    column(3, verbatimTextOutput("cor.stats.EndAvWeight.PeriodSGR")) 
-                                                   )
-                                         ),  
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.EndAvWeight.AvgTemp")),
-                                                    column(3, verbatimTextOutput("cor.stats.EndAvWeight.AvgTemp")) 
-                                           )
-                                         ),
-                                         #..........................................................................
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.PeriodEcon.FCR.PeriodSFR")),
-                                                    column(3, verbatimTextOutput("cor.stats.PeriodEcon.FCR.PeriodSFR")) 
-                                           )
-                                         ),  
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.PeriodEcon.FCR.PeriodSGR")),
-                                                    column(3, verbatimTextOutput("cor.stats.PeriodEcon.FCR.PeriodSGR")) 
-                                           )
-                                         ),  
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.PeriodFCR.AvgTemp")),
-                                                    column(3, verbatimTextOutput("cor.stats.PeriodFCR.AvgTemp")) 
-                                           )
-                                         ),  
-                                         #..........................................................................
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.PeriodSFR.PeriodSGR")),
-                                                    column(3, verbatimTextOutput("cor.stats.PeriodSFR.PeriodSGR")) 
-                                           )
-                                         ),  
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.PeriodSFR.AvgTemp")),
-                                                    column(3, verbatimTextOutput("cor.stats.PeriodSFR.AvgTemp")) 
-                                           )
-                                         ),  
-                                         #..........................................................................
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.PeriodSGR.AvgTemp")),
-                                                    column(3, verbatimTextOutput("cor.stats.PeriodSGR.AvgTemp")) 
-                                           )
-                                         ),
-                                         #..........................................................................
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.EconFCR.EndAvWeight")),
-                                                    column(3, verbatimTextOutput("cor.stats.EconFCR.EndAvWeight")) 
-                                           )
-                                         ),
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.EconFCR.FCRPeriod")),
-                                                    column(3, verbatimTextOutput("cor.stats.EconFCR.FCRPeriod")) 
-                                           )
-                                         ),
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.EconFCR.SFRPeriod")),
-                                                    column(3, verbatimTextOutput("cor.stats.EconFCR.SFRPeriod")) 
-                                           )
-                                         ),
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.EconFCR.SGRPeriod")),
-                                                    column(3, verbatimTextOutput("cor.stats.EconFCR.SGRPeriod")) 
-                                           )
-                                         ),
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.EconFCR.AvgTemp")),
-                                                    column(3, verbatimTextOutput("cor.stats.EconFCR.AvgTemp")) 
-                                           )
-                                         ),
-                                         wellPanel(
-                                           fluidRow(column(9, plotOutput("scatterPlot.EconFCR.Ph")),
-                                                    column(3, verbatimTextOutput("cor.stats.EconFCR.Ph")) 
-                                           )
-                                         )
-                                       ) # end tabPanel "Scatter Plots"
-                              #) # end tabsetPanel
-                       #   ) # end fluidRow
-                   # ) # end fluidPage
-          #  ),  # end tabPanel " Multivariate Statistics "  
-
-#---------------------------------------------------------- Third MenuPage
-                       
-                       
-                      
-                   
-                                 
-
+                              ) )
+                  )
+                  )
+                )# end tabPanel "Help
   ) # end navbarPage
 ) # end shinyUI                                               
                                                    
