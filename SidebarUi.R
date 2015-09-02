@@ -108,7 +108,7 @@ sidebarUni <- sidebarPanel(
                choices = list("None", "Batch", "Hatchery","Origin.Year",  "Actual.Feed",'Month.Sampling'), selected = "None"), #)
   
   shinyFilesButton('file', 'Upload Your Data', 'Please select an Excel file', FALSE)
-  ,actionButton(inputId = 'goUniPlot',  label = 'Refresh Univariate plots')
+  
   
 #)
 ) # end sidebarUni function

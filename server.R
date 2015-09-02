@@ -21,10 +21,14 @@ shinyServer(function(input, output, session){
   #---------------------------------------------------------------------------------------------------
   #     Subset of Dataset 
   #---------------------------------------------------------------------------------------------------
-  volumes <- c('Project Files' = getwd())  #getVolumes() #c('R Installation'=R.home())
-  fileChoose<- shinyFileChoose(input, 'file', roots=volumes, session=session, restrictions=system.file(package='base'))
+  volumes <- getVolumes()  #getVolumes() #c('R Installation'=R.home())
+  fileChoose<- shinyFileChoose(input, 'file', roots=volumes
+                               , session=session #, restrictions=system.file(package='base')
+  )
   
   passData <- reactive({
+    
+    
     
     if (isTRUE(fileChoose)) 
     #if (is.null(fileChoose)){data <- data}
@@ -104,134 +108,85 @@ shinyServer(function(input, output, session){
 #...................................................... H1
 output$histPlotAvWeight <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
       graphData <- passData()
       theGraph <- histPlot(graphData, x="End.Av.Weight", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+  
 })
-#...................................................... H2
-# output$histPlotAvWeightDeviation <- renderPlot({ 
-#   # Re-run when button is clicked
-#   if (input$goUniPlot == 0){
-#     return() }
-#   else{ 
-#     isolate({    
-#       graphData <- passData()
-#       theGraph <- histPlot(graphData, x="Period.Feed.Qty", nbins = input$numbins, group_var=input$radioDimUni )
-#       print(theGraph)
-#     })
-#   }
-# })
+
 
 #...................................................... H3
 output$histPlotEcon.FCR.Period <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+  
       graphData <- passData()
       theGraph <- histPlot(graphData, x="Econ.FCR.Period", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... H4
 output$histPlotBio.FCR <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+  
       graphData <- passData()
       theGraph <- histPlot(graphData, x="Bio.FCR", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... H5
 output$histPlotPeriod.SFR <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+  
       graphData <- passData()
       theGraph <- histPlot(graphData, x="SFR.Period", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... H6
 output$histPlotPeriod.SGR <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+  
       graphData <- passData()
       theGraph <- histPlot(graphData, x="SGR.Period", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... H7
 output$histPlotMortality <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+ 
       graphData <- passData()
       theGraph <- histPlot(graphData, x="Mortality", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+   
 })
 #...................................................... H8
 output$histPlotAverage.Fish.Density <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+     
       graphData <- passData()
       theGraph <- histPlot(graphData, x="Average.Fish.Density", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... H9
 output$histPlotAvg.Temperature <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+     
       graphData <- passData()
       theGraph <- histPlot(graphData, x="Avg.Temperature", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 
 #...................................................... H10
 output$histPlotGPD <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+   
       graphData <- passData()
       theGraph <- histPlot(graphData, x="GPD", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 
 
@@ -242,121 +197,85 @@ output$histPlotGPD <- renderPlot({
 #...................................................... D1
 output$densPlotAvWeight <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+    
       graphData <- passData()
       theGraph <- densityPlot( graphData, x="End.Av.Weight", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... D1
 
 #...................................................... D3
 output$densPlotEcon.FCR.Period <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+    
       graphData <- passData() 
       theGraph <- densityPlot(graphData, x="Econ.FCR.Period", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... D4
 output$densPlotBio.FCR <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+   
       graphData <- passData() 
       theGraph <- densityPlot(graphData, x="Bio.FCR", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... D5
 output$densPlotPeriod.SFR <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+   
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="SFR.Period", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... D6
 output$densPlotPeriod.SGR <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+   
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="SGR.Period", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... D7
 output$densPlotMortality <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+ 
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="Mortality", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... D8
 output$densPlotAverage.Fish.Density <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+ 
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="Average.Fish.Density", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... D9
 output$densPlotAvg.Temperature <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+    
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="Avg.Temperature", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... D10
 output$densPlotGPD <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+   
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="GPD", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 
 #---------------------------------------------------------------------------------------------------
@@ -366,121 +285,85 @@ output$densPlotGPD <- renderPlot({
 #...................................................... B1
 output$boxPlotAvWeight <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+ 
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="End.Av.Weight", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 
 #...................................................... B3
 output$boxPlotEcon.FCR.Period <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+    
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="Econ.FCR.Period", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... B4
 output$boxPlotBio.FCR <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+   
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="Bio.FCR", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... B5
 output$boxPlotSFR.Period <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+    
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="SFR.Period", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... B6
 output$boxPlotPeriod.SGR <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+    
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="SGR.Period", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... B7
 output$boxPlotMortality <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+ 
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="Mortality", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... B8
 output$boxPlotAverage.Fish.Density <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+    
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="Average.Fish.Density", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 #...................................................... B9
 output$boxPlotAvg.Temperature <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+     
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="Avg.Temperature", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+
 })
 
 #...................................................... B10
 output$boxPlotGPD <- renderPlot({ 
   # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
+ 
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="GPD", group_var=input$radioDimUni )
       print(theGraph)
-    })
-  }
+ 
 })
 
 
@@ -490,114 +373,87 @@ output$boxPlotGPD <- renderPlot({
 #     Summary Univariate Statistics
 #---------------------------------------------------------------------------------------------------
 output$summary_stats_EndAvWeight <- renderTable({
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
+
       data <- passData()
       data_stats <- sum_stats(data, measurevar="End.Av.Weight", groupvars=input$radioDimUni,
                                  na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-    })
+
     return(data_stats)
-  }
+  
 })  
 
 output$summary_stats_Econ.FCR.Period <- renderTable({
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
+  
       data <- passData()
       data_stats <- sum_stats(data, measurevar="Econ.FCR.Period", groupvars=input$radioDimUni,
                                  na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-    })
+    
     return(data_stats)
-  }
+  
 }) 
 output$summary_stats_Bio.FCR <- renderTable({
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
+  
       data <- passData()
       data_stats <- sum_stats(data, measurevar="Bio.FCR", groupvars=input$radioDimUni,
                               na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-    })
+  
     return(data_stats)
-  }
+  
 }) 
 output$summary_stats_PeriodSFR <- renderTable({
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
+ 
       data <- passData()
       data_stats <- sum_stats(data, measurevar="SFR.Period", groupvars=input$radioDimUni,
                                  na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-    })
+   
     return(data_stats)
-  }
+ 
 }) 
 output$summary_stats_PeriodSGR <- renderTable({
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
+  
       data <- passData()
       data_stats <- sum_stats(data, measurevar="SGR.Period", groupvars=input$radioDimUni,
                                  na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-    })
+   
     return(data_stats)
-  }
+  
 }) 
 output$summary_stats_Mortality <- renderTable({
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
+  
       data <- passData()
       data_stats <- sum_stats(data, measurevar="Mortality", groupvars=input$radioDimUni,
                                  na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-    })
+    
     return(data_stats)
-  }
+  
 })  
 output$summary_stats_Average.Fish.Density <- renderTable({
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
+   
       data <- passData()
       data_stats <- sum_stats(data, measurevar="Average.Fish.Density", groupvars=input$radioDimUni,
                               na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-    })
+   
     return(data_stats)
-  }
+  
 }) 
 output$summary_stats_Avg.Temp <- renderTable({
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
+    
       data <- passData()
       data_stats <- sum_stats(data, measurevar="Avg.Temperature", groupvars=input$radioDimUni,
                               na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-    })
+   
     return(data_stats)
-  }
+  
 }) 
 
 output$summary_stats_GPD <- renderTable({
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
+  
       data <- passData()
       data_stats <- sum_stats(data, measurevar="GPD", groupvars=input$radioDimUni,
                               na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-    })
+   
     return(data_stats)
-  }
+  
 }) 
 
 
@@ -680,6 +536,17 @@ output$plotDashboard <- renderPlot({
 
 
 
+
+# Allow user to download responses
+output$downloadBtn <- downloadHandler(
+  
+  filename = function() { 
+    paste0('Aquadata.csv')
+  },
+  content = function(file) {
+    write.csv(passData()[0,] , file, row.names = FALSE)
+  }
+)
 
 
 

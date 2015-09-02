@@ -111,8 +111,8 @@ shinyUI(
                                      ,tabPanel("ScatterPlots",
                                                
                                                column(3, 
-                                                      selectInput('x', 'X Axis', choices=names(df), selected="To"),
-                                                      selectInput('y', 'Y Axis', choices=names(df), selected="End.Av.Weight")
+                                                      selectInput('x', 'X Axis', choices=c("Avg.Temperature","Average.Fish.Density","SFR.Period","End.Av.Weight"), selected="To"),
+                                                      selectInput('y', 'Y Axis', choices=c("Bio.FCR","Mortality","Econ.FCR.Period","SGR.Period"), selected="End.Av.Weight")
                                                      
                                                ),
                                                column(3,
@@ -140,10 +140,12 @@ shinyUI(
             tabPanel("Help", id="MenuPage_3", 
                 fluidRow( 
                  wellPanel(
-                   h4("how to upload data")
-                  ,h4("how to download template")
-                  ,h4("how to make analysis")
-                  ,h4("how to interpret the results")
+                   h4("How to upload data")
+                  ,h4("How to download template")
+                  ,downloadButton("downloadBtn", "Download Template")
+                  , br()
+                  ,h4("How to make analysis")
+                  ,h4("How to interpret the results")
                  )
                   ))
             ,tabPanel("About",id="MenuPage_4",
