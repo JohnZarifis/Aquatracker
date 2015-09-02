@@ -7,7 +7,7 @@ df <- create_dataset(Dataset)
 
 sidebarUni <- sidebarPanel(
   #fixed responsive img #added class img
-  #img(src="Aquamanager-logo.png", class = "img-responsive"),
+  img(src="Aquasmart.png", class = "img-responsive"),
   
 #   bsCollapse(id = "collapseSidebar" ,  #open = "Dimensions", 
 #              bsCollapsePanel("Dimensions", style = "primary" ,

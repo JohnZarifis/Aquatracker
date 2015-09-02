@@ -46,48 +46,44 @@ shinyUI(
                                                   ,fluidRow(plotOutput("densPlotAvWeight"))
                                                   ),
                                                             bsCollapsePanel("KPI's", style = "primary" 
-                                                   ,fluidRow(plotOutput("densPlotAvWeightDeviation")),
-                                                   fluidRow(plotOutput("densPlotPeriod.FCR")),
-                                                   fluidRow(plotOutput("densPlotEcon.FCR")),
+                                                  ,fluidRow(plotOutput("densPlotEcon.FCR.Period")),
+                                                   fluidRow(plotOutput("densPlotBio.FCR")),
                                                    fluidRow(plotOutput("densPlotPeriod.SFR")),
                                                    fluidRow(plotOutput("densPlotPeriod.SGR")),
-                                                   fluidRow(plotOutput("densPlotMortality")),
-                                                   fluidRow(plotOutput("densPlotPeriod.Day.Degrees")),
-                                                   fluidRow(plotOutput("densPlotAvg.Temperature")),
-                                                   fluidRow( plotOutput("densPlotPh")),
-                                                   fluidRow( plotOutput("densPlotCAUDAL.O3")),
-                                                   fluidRow( plotOutput("densPlotWATER.RENEWAL")),
-                                                   fluidRow( plotOutput("densPlotNH3")),
-                                                   fluidRow( plotOutput("densPlotNO2"))
-                                        ), # end tabPanel Density Plots
+                                                   fluidRow( plotOutput("densPlotGPD")),
+                                                   fluidRow(plotOutput("densPlotMortality"))),
+                                                            bsCollapsePanel("Envirnomental", style = "primary",
+                                                   fluidRow(plotOutput("densPlotAverage.Fish.Density")),
+                                                   fluidRow(plotOutput("densPlotAvg.Temperature"))
+                                                                            )
+                                                            ) 
+                                                 ), # end tabPanel Density Plots
                                         tabPanel("Boxplots",
-                                                   fluidRow(plotOutput("boxPlotAvWeight")),
-                                                   fluidRow(plotOutput("boxPlotAvWeightDeviation")),  
-                                                   fluidRow(plotOutput("boxPlotPeriod.FCR")),
-                                                   fluidRow(plotOutput("boxPlotEcon.FCR")),
-                                                   fluidRow(plotOutput("boxPlotPeriod.SFR")),
+                                                 bsCollapse(id = "collapseBoxPlot" ,  open = "Av. Weight", 
+                                                             bsCollapsePanel("Av. Weight", style = "primary"
+                                                   ,fluidRow(plotOutput("boxPlotAvWeight"))
+                                                                            )
+                                                            ,bsCollapsePanel("KPI's", style = "primary"
+                                                   ,fluidRow(plotOutput("boxPlotEcon.FCR.Period")),
+                                                   fluidRow(plotOutput("boxPlotBio.FCR")),
+                                                   fluidRow(plotOutput("boxPlotSFR.Period")),
                                                    fluidRow(plotOutput("boxPlotPeriod.SGR")),
-                                                   fluidRow(plotOutput("boxPlotMortality")),
-                                                   fluidRow(plotOutput("boxPlotPeriod.Day.Degrees")),
-                                                   fluidRow(plotOutput("boxPlotAvg.Temperature")),
-                                                   fluidRow( plotOutput("boxPlotPh")),
-                                                   fluidRow( plotOutput("boxPlotCAUDAL.O3")),
-                                                   fluidRow( plotOutput("boxPlotWATER.RENEWAL")),
-                                                   fluidRow( plotOutput("boxPlotNH3")),
-                                                   fluidRow( plotOutput("boxPlotNO2"))
-                                        ), # end tabPanel BoxPlots
+                                                   fluidRow( plotOutput("boxPlotGPD")),
+                                                   fluidRow(plotOutput("boxPlotMortality"))),
+                                                            bsCollapsePanel("Envirnomental", style = "primary",
+                                                   fluidRow(plotOutput("boxPlotAverage.Fish.Density")),
+                                                   fluidRow(plotOutput("boxPlotAvg.Temperature"))
+
+                                        ))), # end tabPanel BoxPlots
                                         tabPanel("Summary Statistics", 
                                                     h4("End Average Weight:"),
                                                     tableOutput("summary_stats_EndAvWeight"),
                                                     hr(),
-                                                    h4("Average Weight Deviation:"),
-                                                    tableOutput("summary_stats_AvWeightDeviation"),
+                                                    h4("Econ Period FCR:"),
+                                                    tableOutput("summary_stats_Econ.FCR.Period"),
                                                     hr(),
-                                                    h4("Period FCR:"),
-                                                    tableOutput("summary_stats_PeriodFCR"),
-                                                    hr(),
-                                                    h4("LTD Econ FCR:"),
-                                                    tableOutput("summary_stats_EconFCR"),
+                                                    h4("Bio Period FCR:"),
+                                                    tableOutput("summary_stats_Bio.FCR"),
                                                     hr(),
                                                     h4("Period SFR:"),
                                                     tableOutput("summary_stats_PeriodSFR"),
@@ -95,29 +91,21 @@ shinyUI(
                                                     h4("Period SGR:"),
                                                     tableOutput("summary_stats_PeriodSGR"),
                                                     hr(),
+                                                    h4("GDP:"),
+                                                    tableOutput("summary_stats_GPD"),
+                                                    hr(),
                                                     h4("LTD Mortality:"),
                                                     tableOutput("summary_stats_Mortality"),
                                                     hr(),
-                                                    h4("Period Thermal Age:"),
-                                                    tableOutput("summary_stats_Period.Day.Degrees"),
+                                                    h4("Average Fish Density:"),
+                                                    tableOutput("summary_stats_Average.Fish.Density"),
                                                     hr(),
                                                     h4("Avg. Temperature:"),
                                                     tableOutput("summary_stats_Avg.Temp"),
-                                                    hr(),
-                                                    h4("Ph:"),
-                                                    tableOutput("summary_stats_Ph"),
-                                                    hr(),
-                                                    h4("CAUDAL O3 (Nm3/H):"),
-                                                    tableOutput("summary_stats_CAUDAL.O3"),
-                                                    hr(),
-                                                    h4("WATER RENEWAL (l./min.):"),
-                                                    tableOutput("summary_stats_WATER.RENEWAL"),
-                                                    hr(),
-                                                    h4("NH3 (ppm.):"),
-                                                    tableOutput("summary_stats_NH3"),
-                                                    hr(),
-                                                    h4("NO2 (ppm.):"),
-                                                    tableOutput("summary_stats_NO2")
+                                                    hr()
+                                                    
+                                                    
+                                                    
                                                  
                                         )#, # end tabPanel Summary Statistics
                                      ,tabPanel("ScatterPlots",
@@ -149,23 +137,51 @@ shinyUI(
               ), # end tabPanel "Univariate Statistics"
 
 # ---------------------------------------------------------- Second MenuPage
-            tabPanel("Help", id="MenuPage_2", 
-                fluidPage( 
-                  tabsetPanel(
-                    tabPanel("Help"
-                          ,fluidRow( 
-                          ), # end fluidRow
-                          hr(),
+            tabPanel("Help", id="MenuPage_3", 
+                fluidRow( 
+                 wellPanel(
+                   h4("how to upload data")
+                  ,h4("how to download template")
+                  ,h4("how to make analysis")
+                  ,h4("how to interpret the results")
+                 )
+                  ))
+            ,tabPanel("About",id="MenuPage_4",
                           fluidRow(
-                            #uiOutput("pairsplot")
-                            )
-                          ) # end tabpanel help
-                    ,tabPanel("Test",
-                              fluidRow(
+                            wellPanel(
+                              
+                              img(src="Aquasmart.png", class = "img-responsive"),
+                    
+                              h2("The European Big Data project for the Aquaculture sector:")
+
+                              , p(strong("AquaSmart"),a("www.aquasmartdata.eu",href = "http://www.aquasmartdata.eu") 
+                              , "is the European Big Data project for the Aquaculture sector
+                                  , and is very much based in the real world, addressing the actual 
+                                    problems that aquaculture producers face.  Its aim is to help fish 
+                                    farming businesses to transform raw data into knowledge via accurate business-driven analytical models 
+                                    in a seamless and efficient process. Then subsequently, use this knowledge to dramatically improve production performance. 
+                                    By offering aquaculture producers throughout Europe software tools to access, share and harness global open data, together with strong data analytics features, 
+                                    it is anticipated that AquaSmart will significantly strengthen their competitiveness and enhance growth potential across Europe over the next ten years.") 
                                 
-                              ) )
-                  )
-                  )
+                                ,code("URL:www.Aquasmartdata.com,  .org,  .eu")
+                                ,br()
+                                ,code("Twitter:@AquaSmartData")
+                                ,br()
+                                ,code("LinkedIn:AquaSmartData")
+                                ,br()
+                                ,code("FB Page: www.facebook.com/Aquasmartdata")
+                                
+                                ,p("Link to AquaSmart Horizon 2020 Project Introduction via @SlideShare now at http://bit.ly/1L468Rm.
+                                
+                                Interested parties can register on with web site.")
+                            )
+                            
+                           
+                            
+                            )     
+                  
+                 
+                  
                 )# end tabPanel "Help
   ) # end navbarPage
 ) # end shinyUI                                               

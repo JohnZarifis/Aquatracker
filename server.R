@@ -1,4 +1,4 @@
-### Version Sea-8 (Sol)
+### Version Aquasmart (Sol)
 # This is the server logic for a Shiny web application.
 
 
@@ -253,20 +253,9 @@ output$densPlotAvWeight <- renderPlot({
   }
 })
 #...................................................... D1
-output$densPlotAvWeightDeviation <- renderPlot({ 
-  # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      theGraph <- densityPlot( graphData, x="Period.Feed.Qty", group_var=input$radioDimUni )
-      print(theGraph)
-    })
-  }
-})
+
 #...................................................... D3
-output$densPlotPeriod.FCR <- renderPlot({ 
+output$densPlotEcon.FCR.Period <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -279,7 +268,7 @@ output$densPlotPeriod.FCR <- renderPlot({
   }
 })
 #...................................................... D4
-output$densPlotEcon.FCR <- renderPlot({ 
+output$densPlotBio.FCR <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -331,7 +320,7 @@ output$densPlotMortality <- renderPlot({
   }
 })
 #...................................................... D8
-output$densPlotPeriod.Day.Degrees <- renderPlot({ 
+output$densPlotAverage.Fish.Density <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -357,7 +346,7 @@ output$densPlotAvg.Temperature <- renderPlot({
   }
 })
 #...................................................... D10
-output$densPlotPh <- renderPlot({ 
+output$densPlotGPD <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -369,14 +358,6 @@ output$densPlotPh <- renderPlot({
     })
   }
 })
-#...................................................... D11
-
-#...................................................... D12
-
-#...................................................... D13
-
-#...................................................... D14
-
 
 #---------------------------------------------------------------------------------------------------
 #     BoxPlots
@@ -395,21 +376,9 @@ output$boxPlotAvWeight <- renderPlot({
     })
   }
 })
-#...................................................... B2
-output$boxPlotAvWeightDeviation <- renderPlot({ 
-  # Re-run when button is clicked
-  if (input$goUniPlot == 0){
-    return() }
-  else{ 
-    isolate({    
-      graphData <- passData()
-      theGraph <- boxPlots( graphData, x="Period.Feed.Qty", group_var=input$radioDimUni )
-      print(theGraph)
-    })
-  }
-})
+
 #...................................................... B3
-output$boxPlotPeriod.FCR <- renderPlot({ 
+output$boxPlotEcon.FCR.Period <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -422,7 +391,7 @@ output$boxPlotPeriod.FCR <- renderPlot({
   }
 })
 #...................................................... B4
-output$boxPlotEcon.FCR <- renderPlot({ 
+output$boxPlotBio.FCR <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -435,7 +404,7 @@ output$boxPlotEcon.FCR <- renderPlot({
   }
 })
 #...................................................... B5
-output$boxPlotPeriod.SFR <- renderPlot({ 
+output$boxPlotSFR.Period <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -474,7 +443,7 @@ output$boxPlotMortality <- renderPlot({
   }
 })
 #...................................................... B8
-output$boxPlotPeriod.Day.Degrees <- renderPlot({ 
+output$boxPlotAverage.Fish.Density <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -501,7 +470,7 @@ output$boxPlotAvg.Temperature <- renderPlot({
 })
 
 #...................................................... B10
-output$boxPlotPh <- renderPlot({ 
+output$boxPlotGPD <- renderPlot({ 
   # Re-run when button is clicked
   if (input$goUniPlot == 0){
     return() }
@@ -532,19 +501,8 @@ output$summary_stats_EndAvWeight <- renderTable({
     return(data_stats)
   }
 })  
-output$summary_stats_AvWeightDeviation <- renderTable({
-  if (input$goUniPlot == 0) { 
-    return() }
-  else{ 
-    isolate({  
-      data <- passData()
-      data_stats <- sum_stats(data, measurevar="Period.Feed.Qty", groupvars=input$radioDimUni,
-                              na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-    })
-    return(data_stats)
-  }
-})  
-output$summary_stats_PeriodFCR <- renderTable({
+
+output$summary_stats_Econ.FCR.Period <- renderTable({
   if (input$goUniPlot == 0) { 
     return() }
   else{ 
@@ -556,7 +514,7 @@ output$summary_stats_PeriodFCR <- renderTable({
     return(data_stats)
   }
 }) 
-output$summary_stats_EconFCR <- renderTable({
+output$summary_stats_Bio.FCR <- renderTable({
   if (input$goUniPlot == 0) { 
     return() }
   else{ 
@@ -604,7 +562,7 @@ output$summary_stats_Mortality <- renderTable({
     return(data_stats)
   }
 })  
-output$summary_stats_Period.Day.Degrees <- renderTable({
+output$summary_stats_Average.Fish.Density <- renderTable({
   if (input$goUniPlot == 0) { 
     return() }
   else{ 
@@ -629,7 +587,7 @@ output$summary_stats_Avg.Temp <- renderTable({
   }
 }) 
 
-output$summary_stats_Ph <- renderTable({
+output$summary_stats_GPD <- renderTable({
   if (input$goUniPlot == 0) { 
     return() }
   else{ 
