@@ -32,6 +32,7 @@ library("ggthemr") # devtools::install_github('ggthemr', 'cttobin')
 #
 pathname = paste(getwd(), "aquaData.xlsx", sep="/")
 Dataset <- read_excel(pathname, sheet = 1 ,col_names = TRUE, na='na')
+
 #View(Dataset)
 #str(Dataset)
 
@@ -63,20 +64,8 @@ create_dataset <- function(dataset){
                      ,"Protein" = dataset$"Protein (%)"
                      ,"Avg.Temperature" = round(dataset$'Av. Temp', digits = 2)
                      ,"Days" = dataset$Days
-                     ,"Net.Growth" =dataset$"Net Growth (Kg)"
+                     ,"Net.Growth" =round(dataset$"Net Growth (Kg)", digits = 0)
                      ,"Average.Fish.Density" = round(dataset$"Average Fish Density",digits = 2)
-                     ,"Econ.FCR.Period" = dataset$'Econ FCR'
-                     ,"Bio.FCR" =  dataset$"Bio FCR"
-                     ,"Mortality.No" = dataset$'Mortality (No)' 
-                     ,"Mortality" = dataset$"Mortality (%)"
-                     ,"SFR.Period" = dataset$'SFR' 
-                     ,"SGR.Period" = dataset$'SGR' 
-                     ,"GPD" = dataset$"GPD (%)"
-                     ,"Protein" = dataset$"Protein (%)"
-                     ,"Avg.Temperature" = dataset$'Av. Temp' 
-                     ,"Days" = dataset$Days
-                     ,"Net.Growth" =dataset$"Net Growth (Kg)"
-                     ,"Average.Fish.Density" = dataset$"Average Fish Density"
                      ,"Digestible.Protein" = dataset$"Digestible Protein (%)"
                      ,"Fat" = dataset$"Fat (%)"
                      ,"Animal.Protein" = dataset$"Animal Protein (%)"
@@ -94,9 +83,9 @@ create_dataset <- function(dataset){
   
   #"ProductionTimeDays" = paste(01,dataset$Origin.Month, dataset$Origin.Year, sep="-" )
 }
-#df <- create_dataset(Dataset)
-#View(data) # for debugging reasons
-
+df <- create_dataset(Dataset)
+#View(df) # for debugging reasons
+#source("SidebarUi.R")
 
 #-----------------------------------------------------------------------------------------------------
 ##   Function that Summarizes data.

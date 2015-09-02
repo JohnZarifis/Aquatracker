@@ -4,7 +4,7 @@ source("SidebarUi.R")
 
 shinyUI( 
   navbarPage( theme = "bootstrap.css",
-              "Aqua Tracker", 
+              "AquaSmart Free Data Analytics Tool", 
               
               #---------------------------------------------------------- First MenuPage
               tabPanel("Statistics ", id="MenuPage_1", 

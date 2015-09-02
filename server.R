@@ -8,7 +8,8 @@
 # Call function to create the dataset for analysis
 #pathname = paste(getwd(), "aquaData.xlsx", sep="/")
 #data <- read_excel(pathname, sheet = 1 ,col_names = TRUE, na='na')
-data <- create_dataset(Dataset)
+#data <- create_dataset(Dataset)
+data <- df
 #View(data) # for debugging reasons
 #str(data)
 #summary(data)
@@ -21,25 +22,40 @@ shinyServer(function(input, output, session){
   #---------------------------------------------------------------------------------------------------
   #     Subset of Dataset 
   #---------------------------------------------------------------------------------------------------
-  volumes <- getVolumes()  #getVolumes() #c('R Installation'=R.home())
-  fileChoose<- shinyFileChoose(input, 'file', roots=volumes
-                               , session=session #, restrictions=system.file(package='base')
-  )
+#   volumes <- getVolumes()  #getVolumes() #c('R Installation'=R.home())
+#   fileChoose<- shinyFileChoose(input, 'file', roots=volumes
+#                                , session=session #, restrictions=system.file(package='base')
+#   )
+  
+  Filedata <- reactive({
+    inFile <- input$file1
+    if (is.null(inFile)){
+      Filedata <- data
+      return(Filedata)
+      }
+    Filedata<-read.csv(inFile$datapath)
+    Filedata$From <-  ymd(Filedata$From)
+    Filedata$To <-  ymd(Filedata$To)
+    return(Filedata)
+    
+  })
   
   passData <- reactive({
+ #df <<- Filedata()
+ data <- Filedata()
+ #View(data)
+ #str(data)
     
-    
-    
-    if (isTRUE(fileChoose)) 
-    #if (is.null(fileChoose)){data <- data}
-     {
-      fileSelected <- parseFilePaths(volumes, input$file)
-      data <- read_excel(as.character(fileSelected$datapath), sheet = 1 ,col_names = TRUE, na='na')
-      colnames( data ) <- str_replace_all(colnames( data ), c(" " = "", "-" = ".","%"=".perc"))
-      i <- sapply(data, is.character)
-      data[i] <- lapply(data[i], as.factor)
-    }else {data <- data}
-   
+#     if (isTRUE(fileChoose)) 
+#     #if (is.null(fileChoose)){data <- data}
+#      {
+#       fileSelected <- parseFilePaths(volumes, input$file)
+#       data <- read_excel(as.character(fileSelected$datapath), sheet = 1 ,col_names = TRUE, na='na')
+#       colnames( data ) <- str_replace_all(colnames( data ), c(" " = "", "-" = ".","%"=".perc"))
+#       i <- sapply(data, is.character)
+#       data[i] <- lapply(data[i], as.factor)
+#     }else {data <- data}
+#    
     
     if (input$groupUnit != "All"){ 
       data <- subset(data, Unit %in% c(input$groupUnit))
@@ -511,6 +527,7 @@ datasetMD <- reactive({
 output$plotDashboard <- renderPlot({
  
   dsMD <- passData()
+  
   p <- ggplot(dsMD, aes_string(x=input$x, y=input$y)) + geom_point(size=2.5) 
   
   if (input$radioDimUni != 'None')
@@ -537,16 +554,232 @@ output$plotDashboard <- renderPlot({
 
 
 
-# Allow user to download responses
+####----Allow user to download template
 output$downloadBtn <- downloadHandler(
   
   filename = function() { 
-    paste0('Aquadata.csv')
+    paste0('Aquadata.xlsx')
   },
   content = function(file) {
+    
     write.csv(passData()[0,] , file, row.names = FALSE)
+    #write.csv(passData() , file, row.names = FALSE)
   }
 )
+#####-----------Dynamic Sidebar----------------
+output$groupUnit <- renderUI({
+  
+  df<- Filedata()
+  selectInput(inputId='groupUnit', label='Cage', choices=c("All", unique(as.character(df$Unit))), selected="All", multiple=TRUE)
+  
+})
+output$groupBatch <- renderUI({
+  
+  df<- Filedata()
+  selectInput(inputId='groupBatch', label='Batch', choices=c("All", unique(as.character(df$Batch))), selected="All", multiple=TRUE)
+  
+})
+
+output$groupHatchery <- renderUI({
+  
+  df<- Filedata()
+  selectInput(inputId='groupHatchery', label='Hatchery', choices=c("All", unique(as.character(df$Hatchery))), selected="All", multiple=TRUE)
+  
+})
+
+
+
+output$groupOriginYear <- renderUI({
+  
+  df<- Filedata()
+  selectInput(inputId='groupOriginYear', label='Origin.Year', choices=c("All", unique(as.character(df$Origin.Year))), selected="All", multiple=TRUE)
+  
+})
+output$groupMonth.Sampling <- renderUI({
+  
+  df<- Filedata()
+  selectInput(inputId='groupMonth.Sampling', label='Month.Sampling', choices=c("All", unique(as.character(df$Month.Sampling))), selected="All", multiple=TRUE)
+  
+})
+
+output$groupFood <- renderUI({
+  
+  df<- Filedata()
+  selectInput(inputId='groupFood', label='Actual.Feed', choices=c("All", unique(as.character(df$Actual.Feed))), selected="All", multiple=TRUE)
+  
+})
+
+
+
+
+output$dateRangeFrom <- renderUI({
+  
+  df<- Filedata()
+  dateRangeInput('dateRangeFrom',
+                 label = paste(' From: '),
+                 start = min( ymd(df$From)-days(0) ), 
+                 end = max( ymd(df$From)+days(1) ),
+                 min = min( ymd(df$From)-days(0) ),
+                 max = max( ymd(df$From)+days(1)),
+                 separator = " to ", format = "dd/mm/yyyy",
+                 startview = 'year', language = 'en', weekstart = 0
+  )
+  
+})
+
+
+output$dateRangeTo <- renderUI({
+  
+  df<- Filedata()
+  dateRangeInput('dateRangeTo',
+                 label = paste(' To: '),
+                 start = min( ymd(df$To)-days(1) ), 
+                 end = max( ymd(df$To)+days(1) ),
+                 min = min( ymd(df$To)-days(1) ),
+                 max = max( ymd(df$To)+days(1) ),
+                 separator = " to ", format = "dd/mm/yyyy",
+                 startview = 'year', language = 'en', weekstart = 0
+                 )
+  
+  
+})
+
+
+output$rangeStAvWeight <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangeStAvWeight", "Start.Av.Weight:", min = min(as.double(df$Start.Av.Weight)), 
+              max = max(as.double(df$Start.Av.Weight)), 
+              value = c(min(as.double(df$Start.Av.Weight)), max(as.double(df$Start.Av.Weight))),
+              step=1.0, round=TRUE, sep=".")
+  
+  
+})
+
+output$rangeBioFCR <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangeBioFCR", "Bio FCR:", 
+              min = min(as.double(df$'Bio.FCR')), 
+              max = max(as.double(df$'Bio.FCR')), 
+              value = c(min(as.double(df$'Bio.FCR')), 
+                        max(as.double(df$'Bio.FCR'))),
+              step=0.1, round=-2, sep=".")
+  
+  
+})
+
+output$rangePeriod.FCR <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangePeriod.FCR", "Econ.FCR.Period:", min = min(as.double(df$Econ.FCR.Period)), 
+              max = max(as.double(df$Econ.FCR.Period)), 
+              value = c(min(as.double(df$Econ.FCR.Period)), max(as.double(df$Econ.FCR.Period))), 
+              step=0.1, round=-2, sep=".")
+  
+  
+})
+
+
+output$rangeGPD <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangeGPD", "GPD (%):", min = min(as.double(df$'GPD')), 
+              max = max(as.double(df$'GPD')), 
+              value = c(min(as.double(df$'GPD')), max(as.double(df$'GPD'))), 
+              step=0.1, round=-2, sep=".")
+  
+  
+})
+
+output$rangePeriod.Feed.Qty <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangePeriod.Feed.Qty", "Period.Feed.Qty:", 
+              min = min(as.double(df$Period.Feed.Qty), na.rm=TRUE), 
+              max = max(as.double(df$Period.Feed.Qty), na.rm=TRUE), 
+              value = c(min(as.double(df$Period.Feed.Qty)), 
+                        max(as.double(df$Period.Feed.Qty))), 
+              step=10, round=TRUE, sep=".")
+  
+  
+})
+
+
+output$rangeAvWeight <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangeAvWeight", "End.Av.Weight:", min = min(as.double(df$End.Av.Weight)), 
+              max = max(as.double(df$End.Av.Weight)), 
+              value = c(min(as.double(df$End.Av.Weight)), max(as.double(df$End.Av.Weight))),
+              step=1.0, round=TRUE, sep=".")
+  
+  
+})
+
+output$rangePeriod.SFR <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangePeriod.SFR", "Period.SFR:", min = min(as.double(df$SFR.Period)), 
+              max = max(as.double(df$SFR.Period)), 
+              value = c(min(as.double(df$SFR.Period)), max(as.double(df$SFR.Period))), step=0.1, 
+              round=-2, sep=".")
+  
+  
+})
+
+output$rangePeriod.SGR <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangePeriod.SGR", "Period.SGR:", min = min(as.double(df$SGR.Period)), 
+              max = max(as.double(df$SGR.Period)), 
+              value = c(min(as.double(df$SGR.Period)), max(as.double(df$SGR.Period))), step=0.1, 
+              round=-2, sep=".")
+  
+  
+})
+
+
+output$rangeAvgTemp <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangeAvgTemp", "Avg.Temperature:", min = min(as.double(df$Avg.Temperature)), 
+              max = max(as.double(df$Avg.Temperature)), 
+              value = c(min(as.double(df$Avg.Temperature)), max(as.double(df$Avg.Temperature))), 
+              step=0.5, round=-2, sep=".")
+  
+  
+})
+
+
+output$rangeMortality <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangeMortality", "Mortality (%):", 
+              min = min(as.double(df$Mortality), na.rm=TRUE), 
+              max = max(as.double(df$Mortality), na.rm=TRUE), 
+              value = c(min(as.double(df$Mortality)), 
+                        max(as.double(df$Mortality))), 
+              step=10, round=TRUE, sep=".")
+  
+  
+})
+
+
+output$rangePeriod.SGR <- renderUI({
+  
+  df<- Filedata()
+  sliderInput("rangePeriod.SGR", "Period.SGR:", min = min(as.double(df$SGR.Period)), 
+              max = max(as.double(df$SGR.Period)), 
+              value = c(min(as.double(df$SGR.Period)), max(as.double(df$SGR.Period))), step=0.1, 
+              round=-2, sep=".")
+  
+  
+})
+
+
+
+
 
 
 
