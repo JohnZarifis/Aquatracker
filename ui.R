@@ -26,7 +26,7 @@ shinyUI(
                                                                              fluidRow(plotOutput("densPlotBio.FCR")),
                                                                              fluidRow(plotOutput("densPlotPeriod.SFR")),
                                                                              fluidRow(plotOutput("densPlotPeriod.SGR")),
-                                                                             fluidRow( plotOutput("densPlotGPD")),
+                                                                             # fluidRow( plotOutput("densPlotGPD")),
                                                                              fluidRow(plotOutput("densPlotMortality"))),
                                                              bsCollapsePanel("Envirnomental", style = "primary",
                                                                              fluidRow(plotOutput("densPlotAverage.Fish.Density")),
@@ -48,7 +48,7 @@ shinyUI(
                                                     fluidRow( plotOutput("histPlotBio.FCR")),
                                                     fluidRow( plotOutput("histPlotPeriod.SFR")),
                                                     fluidRow( plotOutput("histPlotPeriod.SGR")),
-                                                    fluidRow( plotOutput("histPlotGPD")),
+                                                    # fluidRow( plotOutput("histPlotGPD")),
                                                     fluidRow( plotOutput("histPlotMortality"))),
                                                              bsCollapsePanel("Envirnomental", style = "primary" ,
                                                     fluidRow( plotOutput("histPlotAverage.Fish.Density")),
@@ -69,7 +69,7 @@ shinyUI(
                                                    fluidRow(plotOutput("boxPlotBio.FCR")),
                                                    fluidRow(plotOutput("boxPlotSFR.Period")),
                                                    fluidRow(plotOutput("boxPlotPeriod.SGR")),
-                                                   fluidRow( plotOutput("boxPlotGPD")),
+                                                   # fluidRow( plotOutput("boxPlotGPD")),
                                                    fluidRow(plotOutput("boxPlotMortality"))),
                                                             bsCollapsePanel("Envirnomental", style = "primary",
                                                    fluidRow(plotOutput("boxPlotAverage.Fish.Density")),
@@ -92,9 +92,9 @@ shinyUI(
                                                     h4("Period SGR:"),
                                                     tableOutput("summary_stats_PeriodSGR"),
                                                     hr(),
-                                                    h4("GDP:"),
-                                                    tableOutput("summary_stats_GPD"),
-                                                    hr(),
+#                                                     h4("GDP:"),
+#                                                     tableOutput("summary_stats_GPD"),
+#                                                     hr(),
                                                     h4("LTD Mortality:"),
                                                     tableOutput("summary_stats_Mortality"),
                                                     hr(),
@@ -113,7 +113,7 @@ shinyUI(
                                                
                                                column(3, 
                                                       selectInput('x', 'X Axis', choices=c("End.Av.Weight","Avg.Temperature","Average.Fish.Density","SFR.Period"), selected="To"),
-                                                      selectInput('y', 'Y Axis', choices=c("Mortality","Bio.FCR","Econ.FCR.Period","SGR.Period"), selected="End.Av.Weight")
+                                                      selectInput('y', 'Y Axis', choices=c("Mortality","Bio.FCR.Period","Econ.FCR.Period","SGR.Period"), selected="End.Av.Weight")
                                                      
                                                ),
                                                column(3,

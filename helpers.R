@@ -52,7 +52,7 @@ create_dataset <- function(dataset){
                      ,"Opening.Fish.No" = dataset$'Start.FishNo' 
                      ,"Closing.Fish.No" = dataset$'End.FishNo' 
                      ,"Econ.FCR.Period" = round(dataset$'Econ FCR',digits=2)
-                     ,"Bio.FCR" =  round(dataset$"Bio FCR" , digits = 2)
+                     ,"Bio.FCR.Period" =  round(dataset$"Bio FCR" , digits = 2)
                      ,"Mortality.No" = dataset$'Mortality (No)' 
                      ,"Mortality" = round(dataset$"Mortality (%)", digits = 2)
                      ,"SFR.Period" = round(dataset$'SFR' , digits = 2)

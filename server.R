@@ -1,14 +1,6 @@
 ### Version Aquasmart (Sol)
 # This is the server logic for a Shiny web application.
 
-
-# load helpers.R file 
-#source("helpers.R")  # no need UI is loaded first.
-
-# Call function to create the dataset for analysis
-#pathname = paste(getwd(), "aquaData.xlsx", sep="/")
-#data <- read_excel(pathname, sheet = 1 ,col_names = TRUE, na='na')
-#data <- create_dataset(Dataset)
 data <- df
 #View(data) # for debugging reasons
 #str(data)
@@ -22,11 +14,7 @@ shinyServer(function(input, output, session){
   #---------------------------------------------------------------------------------------------------
   #     Subset of Dataset 
   #---------------------------------------------------------------------------------------------------
-#   volumes <- getVolumes()  #getVolumes() #c('R Installation'=R.home())
-#   fileChoose<- shinyFileChoose(input, 'file', roots=volumes
-#                                , session=session #, restrictions=system.file(package='base')
-#   )
-  
+
   Filedata <- reactive({
     inFile <- input$file1
     if (is.null(inFile)){
@@ -41,22 +29,9 @@ shinyServer(function(input, output, session){
   })
   
  passData <- reactive({
- 
+   
  data <- Filedata()
- #View(data)
- #str(data)
-    
-#     if (isTRUE(fileChoose)) 
-#     #if (is.null(fileChoose)){data <- data}
-#      {
-#       fileSelected <- parseFilePaths(volumes, input$file)
-#       data <- read_excel(as.character(fileSelected$datapath), sheet = 1 ,col_names = TRUE, na='na')
-#       colnames( data ) <- str_replace_all(colnames( data ), c(" " = "", "-" = ".","%"=".perc"))
-#       i <- sapply(data, is.character)
-#       data[i] <- lapply(data[i], as.factor)
-#     }else {data <- data}
-#    
-    
+ View(data)
     if (input$groupUnit != "All"){ 
       data <- subset(data, Unit %in% c(input$groupUnit))
     }
@@ -76,10 +51,10 @@ shinyServer(function(input, output, session){
     
      data <- data[ data$End.Av.Weight >= as.numeric(input$rangeAvWeight[1]) & data$End.Av.Weight <= as.numeric(input$rangeAvWeight[2])
                    & data$Start.Av.Weight >= as.numeric(input$rangeStAvWeight[1]) & data$Start.Av.Weight <= as.numeric(input$rangeStAvWeight[2])
-                   & data$Bio.FCR >= as.numeric(input$rangeBioFCR[1])
-                   & data$Bio.FCR <= as.numeric(input$rangeBioFCR[2]) 
+                   & data$Bio.FCR.Period >= as.numeric(input$rangeBioFCR[1])
+                   & data$Bio.FCR.Period <= as.numeric(input$rangeBioFCR[2]) 
                    & data$Econ.FCR.Period >= as.numeric(input$rangePeriod.FCR[1]) & data$Econ.FCR.Period <= as.numeric(input$rangePeriod.FCR[2]) 
-                   & data$GPD >= as.numeric(input$rangeGPD[1]) & data$GPD <= as.numeric(input$rangeGPD[2])  
+                   & data$Days >= as.numeric(input$rangeDays[1]) & data$Days <= as.numeric(input$rangeDays[2])  
                    & data$SGR.Period >= as.numeric(input$rangePeriod.SGR[1]) & data$SGR.Period <= as.numeric(input$rangePeriod.SGR[2]) 
                    & data$SFR.Period >= as.numeric(input$rangePeriod.SFR[1]) & data$SFR.Period <= as.numeric(input$rangePeriod.SFR[2]) 
                    & data$Mortality >= as.numeric(input$rangeMortality[1]) & data$Mortality <= as.numeric(input$rangeMortality[2])
@@ -110,7 +85,7 @@ shinyServer(function(input, output, session){
     
     # For debugging 
     # class(data$ProductionTimeDays)
-    # View(data)
+     #View(data)
     # str(data)
     # print(nrow(data))
     #return(data)
@@ -125,9 +100,8 @@ shinyServer(function(input, output, session){
 #...................................................... H1
 output$histPlotAvWeight <- renderPlot({ 
   # Re-run when button is clicked
-      #graphData <- passData()
-      
-      theGraph <- histPlot(data, x="End.Av.Weight", nbins = input$numbins, group_var=input$radioDimUni )
+      graphData <- passData()
+      theGraph <- histPlot(graphData, x="End.Av.Weight", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
   
 })
@@ -137,17 +111,17 @@ output$histPlotAvWeight <- renderPlot({
 output$histPlotEcon.FCR.Period <- renderPlot({ 
   # Re-run when button is clicked
   
-      #graphData <- passData()
-      theGraph <- histPlot(data, x="Econ.FCR.Period", nbins = input$numbins, group_var=input$radioDimUni )
+      graphData <- passData()
+      theGraph <- histPlot(graphData, x="Econ.FCR.Period", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
 #...................................................... H4
 output$histPlotBio.FCR <- renderPlot({ 
   # Re-run when button is clicked
-      graphData <- data
+      
       graphData <- passData()
-      theGraph <- histPlot(data, x="Bio.FCR", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(graphData, x="Bio.FCR.Period", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -156,7 +130,7 @@ output$histPlotPeriod.SFR <- renderPlot({
   # Re-run when button is clicked
   
       graphData <- passData()
-      theGraph <- histPlot(data, x="SFR.Period", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(graphData, x="SFR.Period", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -165,7 +139,7 @@ output$histPlotPeriod.SGR <- renderPlot({
   # Re-run when button is clicked
   
       graphData <- passData()
-      theGraph <- histPlot(data, x="SGR.Period", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(graphData, x="SGR.Period", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -174,7 +148,7 @@ output$histPlotMortality <- renderPlot({
   # Re-run when button is clicked
  
       graphData <- passData()
-      theGraph <- histPlot(data, x="Mortality", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(graphData, x="Mortality", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
    
 })
@@ -183,7 +157,7 @@ output$histPlotAverage.Fish.Density <- renderPlot({
   # Re-run when button is clicked
      
       graphData <- passData()
-      theGraph <- histPlot(data, x="Average.Fish.Density", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(graphData, x="Average.Fish.Density", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -192,20 +166,20 @@ output$histPlotAvg.Temperature <- renderPlot({
   # Re-run when button is clicked
      
       graphData <- passData()
-      theGraph <- histPlot(data, x="Avg.Temperature", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(graphData, x="Avg.Temperature", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
 
 #...................................................... H10
-output$histPlotGPD <- renderPlot({ 
-  # Re-run when button is clicked
-   
-      graphData <- passData()
-      theGraph <- histPlot(data, x="GPD", nbins = input$numbins, group_var=input$radioDimUni )
-      print(theGraph)
-
-})
+# output$histPlotGPD <- renderPlot({ 
+#   # Re-run when button is clicked
+#    
+#       graphData <- passData()
+#       theGraph <- histPlot(graphData, x="GPD", nbins = input$numbins, group_var=input$radioDimUni )
+#       print(theGraph)
+# 
+# })
 
 
 #---------------------------------------------------------------------------------------------------
@@ -216,8 +190,8 @@ output$histPlotGPD <- renderPlot({
 output$densPlotAvWeight <- renderPlot({ 
   # Re-run when button is clicked
     
-      #graphData <- passData()
-      theGraph <- densityPlot( data, x="End.Av.Weight", group_var=input$radioDimUni )
+      graphData <- passData()
+      theGraph <- densityPlot( graphData, x="End.Av.Weight", group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -227,7 +201,7 @@ output$densPlotAvWeight <- renderPlot({
 output$densPlotEcon.FCR.Period <- renderPlot({ 
   # Re-run when button is clicked
     
-      #graphData <- passData() 
+      graphData <- passData() 
       theGraph <- densityPlot(graphData, x="Econ.FCR.Period", group_var=input$radioDimUni )
       print(theGraph)
 
@@ -236,8 +210,8 @@ output$densPlotEcon.FCR.Period <- renderPlot({
 output$densPlotBio.FCR <- renderPlot({ 
   # Re-run when button is clicked
    
-      #graphData <- passData() 
-      theGraph <- densityPlot(graphData, x="Bio.FCR", group_var=input$radioDimUni )
+      graphData <- passData() 
+      theGraph <- densityPlot(graphData, x="Bio.FCR.Period", group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -287,14 +261,14 @@ output$densPlotAvg.Temperature <- renderPlot({
 
 })
 #...................................................... D10
-output$densPlotGPD <- renderPlot({ 
-  # Re-run when button is clicked
-   
-      graphData <- passData()   
-      theGraph <- densityPlot(graphData, x="GPD", group_var=input$radioDimUni )
-      print(theGraph)
-
-})
+# output$densPlotGPD <- renderPlot({ 
+#   # Re-run when button is clicked
+#    
+#       graphData <- passData()   
+#       theGraph <- densityPlot(graphData, x="GPD", group_var=input$radioDimUni )
+#       print(theGraph)
+# 
+# })
 
 #---------------------------------------------------------------------------------------------------
 #     BoxPlots
@@ -324,7 +298,7 @@ output$boxPlotBio.FCR <- renderPlot({
   # Re-run when button is clicked
    
       graphData <- passData()
-      theGraph <- boxPlots( graphData, x="Bio.FCR", group_var=input$radioDimUni )
+      theGraph <- boxPlots( graphData, x="Bio.FCR.Period", group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -375,14 +349,14 @@ output$boxPlotAvg.Temperature <- renderPlot({
 })
 
 #...................................................... B10
-output$boxPlotGPD <- renderPlot({ 
-  # Re-run when button is clicked
- 
-      graphData <- passData()
-      theGraph <- boxPlots( graphData, x="GPD", group_var=input$radioDimUni )
-      print(theGraph)
- 
-})
+# output$boxPlotGPD <- renderPlot({ 
+#   # Re-run when button is clicked
+#  
+#       graphData <- passData()
+#       theGraph <- boxPlots( graphData, x="GPD", group_var=input$radioDimUni )
+#       print(theGraph)
+#  
+# })
 
 
 
@@ -412,7 +386,7 @@ output$summary_stats_Econ.FCR.Period <- renderTable({
 output$summary_stats_Bio.FCR <- renderTable({
   
       data <- passData()
-      data_stats <- sum_stats(data, measurevar="Bio.FCR", groupvars=input$radioDimUni,
+      data_stats <- sum_stats(data, measurevar="Bio.FCR.Period", groupvars=input$radioDimUni,
                               na.rm=FALSE, conf.interval=.95, .drop=TRUE)
   
     return(data_stats)
@@ -464,42 +438,20 @@ output$summary_stats_Avg.Temp <- renderTable({
   
 }) 
 
-output$summary_stats_GPD <- renderTable({
-  
-      data <- passData()
-      data_stats <- sum_stats(data, measurevar="GPD", groupvars=input$radioDimUni,
-                              na.rm=FALSE, conf.interval=.95, .drop=TRUE)
-   
-    return(data_stats)
-  
-}) 
+# output$summary_stats_GPD <- renderTable({
+#   
+#       data <- passData()
+#       data_stats <- sum_stats(data, measurevar="GPD", groupvars=input$radioDimUni,
+#                               na.rm=FALSE, conf.interval=.95, .drop=TRUE)
+#    
+#     return(data_stats)
+#   
+# }) 
 
 
 
 
 
-
-#---------------------------------------------------------------------------------------------------
-#     Scatter Matrix Plots & Scatter Plots
-#---------------------------------------------------------------------------------------------------
-
-# output$pD3 <- renderPairsD3({
-#   dim_vars = c("End.Av.Weight", "SFR.Period", "SGR.Period",  
-#                "Mortality", "Avg.Temperature", "Bio.FCR","Average.Fish.Density" )
-#   pairsD3(passData()[,dim_vars], group = group(),  labels = NULL)
-# })
-# 
-# group = reactive({
-#   if(input$radioDimMulti=="None"){
-#     return(NULL)
-#     
-#   } else return(passData()[,input$radioDimMulti])
-# })
-# 
-# 
-# output$pairsplot = renderUI({
-#   pairsD3Output("pD3",width = "1200px", height = "1200px")
-# })
 
 
 output$cor <- renderPrint({
@@ -560,7 +512,7 @@ output$plotDashboard <- renderPlot({
 output$downloadBtn <- downloadHandler(
   
   filename = function() { 
-    paste0('aquaDataaaa.xlsx')
+    paste0('Template.xlsx')
   },
   content = function(file) {
   
@@ -663,11 +615,11 @@ output$rangeStAvWeight <- renderUI({
 output$rangeBioFCR <- renderUI({
   
   df<- Filedata()
-  sliderInput("rangeBioFCR", "Bio FCR:", 
-              min = min(as.double(df$'Bio.FCR')), 
-              max = max(as.double(df$'Bio.FCR')), 
-              value = c(min(as.double(df$'Bio.FCR')), 
-                        max(as.double(df$'Bio.FCR'))),
+  sliderInput("rangeBioFCR", "Bio FCR Period:", 
+              min = min(as.double(df$'Bio.FCR.Period')), 
+              max = max(as.double(df$'Bio.FCR.Period')), 
+              value = c(min(as.double(df$'Bio.FCR.Period')), 
+                        max(as.double(df$'Bio.FCR.Period'))),
               step=0.1, round=-2, sep=".")
   
   
@@ -685,13 +637,13 @@ output$rangePeriod.FCR <- renderUI({
 })
 
 
-output$rangeGPD <- renderUI({
+output$rangeDays <- renderUI({
   
   df<- Filedata()
-  sliderInput("rangeGPD", "GPD (%):", min = min(as.double(df$'GPD')), 
-              max = max(as.double(df$'GPD')), 
-              value = c(min(as.double(df$'GPD')), max(as.double(df$'GPD'))), 
-              step=0.1, round=-2, sep=".")
+  sliderInput("rangeDays", "Days Between Samplings:", min = min(as.double(df$'Days')), 
+              max = max(as.double(df$'Days')), 
+              value = c(min(as.double(df$'Days')), max(as.double(df$'Days'))), 
+              step=1, round=0, sep=".")
   
   
 })
@@ -750,7 +702,7 @@ output$rangeAvgTemp <- renderUI({
   sliderInput("rangeAvgTemp", "Avg.Temperature:", min = min(as.double(df$Avg.Temperature)), 
               max = max(as.double(df$Avg.Temperature)), 
               value = c(min(as.double(df$Avg.Temperature)), max(as.double(df$Avg.Temperature))), 
-              step=0.5, round=-2, sep=".")
+              step=0.1, round=-2, sep=".")
   
   
 })
@@ -764,7 +716,7 @@ output$rangeMortality <- renderUI({
               max = max(as.double(df$Mortality), na.rm=TRUE), 
               value = c(min(as.double(df$Mortality)), 
                         max(as.double(df$Mortality))), 
-              step=10, round=TRUE, sep=".")
+              step=0.1, round=-1, sep=".")
   
   
 })

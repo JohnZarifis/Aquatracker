@@ -27,101 +27,40 @@ sidebarUni <- sidebarPanel(
                  uiOutput("rangeStAvWeight")
                  ,uiOutput("rangeBioFCR")
                  ,uiOutput("rangePeriod.FCR")
-                 ,uiOutput("rangeGPD")
+                 ,uiOutput("rangeDays")
                  ,uiOutput("rangePeriod.Feed.Qty")
-                 #                   sliderInput("rangeStAvWeight", "Start.Av.Weight:", min = min(as.double(df$Start.Av.Weight)), 
-                 #                               max = max(as.double(df$Start.Av.Weight)), 
-                 #                               value = c(min(as.double(df$Start.Av.Weight)), max(as.double(df$Start.Av.Weight))),
-                 #                               step=1.0, round=TRUE, sep="."),
-                 #                   sliderInput("rangeBioFCR", "Bio FCR:", 
-                 #                               min = min(as.double(df$'Bio.FCR')), 
-                 #                               max = max(as.double(df$'Bio.FCR')), 
-                 #                               value = c(min(as.double(df$'Bio.FCR')), 
-                 #                                         max(as.double(df$'Bio.FCR'))),
-                 #                               step=0.1, round=-2, sep="."),
-                 #                   sliderInput("rangePeriod.FCR", "Econ.FCR.Period:", min = min(as.double(df$Econ.FCR.Period)), 
-                 #                               max = max(as.double(df$Econ.FCR.Period)), 
-                 #                               value = c(min(as.double(df$Econ.FCR.Period)), max(as.double(df$Econ.FCR.Period))), 
-                 #                               step=0.1, round=-2, sep="."),
-                 #                   sliderInput("rangeGPD", "GPD (%):", min = min(as.double(df$'GPD')), 
-                 #                               max = max(as.double(df$'GPD')), 
-                 #                               value = c(min(as.double(df$'GPD')), max(as.double(df$'GPD'))), 
-                 #                               step=0.1, round=-2, sep="."),
-                 #                   sliderInput("rangePeriod.Feed.Qty", "Period.Feed.Qty:", 
-                 #                               min = min(as.double(df$Period.Feed.Qty), na.rm=TRUE), 
-                 #                               max = max(as.double(df$Period.Feed.Qty), na.rm=TRUE), 
-                 #                               value = c(min(as.double(df$Period.Feed.Qty)), 
-                 #                                         max(as.double(df$Period.Feed.Qty))), 
-                 #                               step=10, round=TRUE, sep=".")
-),
+                ),
 column(6,
        uiOutput("rangeAvWeight")
        ,uiOutput("rangePeriod.SFR")
        ,uiOutput("rangePeriod.SGR")
        ,uiOutput("rangeAvgTemp")
        ,uiOutput("rangeMortality")
-       
-       #          sliderInput("rangeAvWeight", "End.Av.Weight:", min = min(as.double(df$End.Av.Weight)), 
-       #                      max = max(as.double(df$End.Av.Weight)), 
-       #                      value = c(min(as.double(df$End.Av.Weight)), max(as.double(df$End.Av.Weight))),
-       #                      step=1.0, round=TRUE, sep="."),
-       #          sliderInput("rangePeriod.SFR", "Period.SFR:", min = min(as.double(df$SFR.Period)), 
-       #                      max = max(as.double(df$SFR.Period)), 
-       #                      value = c(min(as.double(df$SFR.Period)), max(as.double(df$SFR.Period))), step=0.1, 
-       #                      round=-2, sep="."),
-       #          sliderInput("rangePeriod.SGR", "Period.SGR:", min = min(as.double(df$SGR.Period)), 
-       #                      max = max(as.double(df$SGR.Period)), 
-       #                      value = c(min(as.double(df$SGR.Period)), max(as.double(df$SGR.Period))), step=0.1, 
-       #                      round=-2, sep="."),
-       #          sliderInput("rangeAvgTemp", "Avg.Temperature:", min = min(as.double(df$Avg.Temperature)), 
-       #                      max = max(as.double(df$Avg.Temperature)), 
-       #                      value = c(min(as.double(df$Avg.Temperature)), max(as.double(df$Avg.Temperature))), 
-       #                      step=0.5, round=-2, sep="."), 
-       #                      
-       #          sliderInput("rangeMortality", "Mortality (%):", 
-       #                      min = min(as.double(df$Mortality), na.rm=TRUE), 
-       #                      max = max(as.double(df$Mortality), na.rm=TRUE), 
-       #                      value = c(min(as.double(df$Mortality)), 
-       #                                max(as.double(df$Mortality))), 
-       #                      step=10, round=TRUE, sep=".")
-) # end column
-#) # end fluid row
-) # end of colapsePanel
+       ) # end column
+
+) # end of fluidRow
   ,fluidRow(
     column(6,
                     uiOutput("groupUnit")
                    ,uiOutput("groupBatch")
                    ,uiOutput("groupHatchery")
-#                   selectInput(inputId='groupUnit', label='Cage', choices=c("All", unique(as.character(df$Unit))), selected="All", multiple=TRUE),
-#                  ,selectInput(inputId='groupBatch', label='Batch', choices=c("All", unique(as.character(df$Batch))), selected="All", multiple=TRUE)
-#                  ,selectInput(inputId='groupHatchery', label='Hatchery', choices=c("All", unique(as.character(df$Hatchery))), selected="All", multiple=TRUE)
-                  ),
+           ),
            column(6,
                    uiOutput("groupOriginYear")
                   ,uiOutput("groupMonth.Sampling")
                   ,uiOutput("groupFood")
-#                   selectInput(inputId='groupOriginYear', label='Origin.Year', choices=c("All", unique(as.character(df$Origin.Year))), selected="All", multiple=TRUE),
-#                   selectInput(inputId='groupMonth.Sampling', label='Month.Sampling', choices=c("All", unique(as.character(df$Month.Sampling))), selected="All", multiple=TRUE),
-#                   selectInput(inputId='groupFood', label='Actual.Feed', choices=c("All", unique(as.character(df$Actual.Feed))), selected="All", multiple=TRUE))
                   ),
                   
   uiOutput("dateRangeFrom")
  ,uiOutput("dateRangeTo"))
 ,hr()
 ,fileInput('file1', 'Choose CSV File To upload Your Data'
-#           , accept=c('text/csv', 
-#                     'text/comma-separated-values,text/plain', 
-#                     '.csv',
-#                     '.xls',
-#                     '.xlsx')
+           , accept=c('text/csv', 
+                    'text/comma-separated-values,text/plain', 
+                     '.csv'
+                     )
            )
 
 
-  
 
-  
-  
-  #bsCollapsePanel("Separate By:", style = "primary" ,
-  
-#)
 ) # end sidebarUni function
