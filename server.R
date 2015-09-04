@@ -40,8 +40,8 @@ shinyServer(function(input, output, session){
     
   })
   
-  passData <- reactive({
- #df <<- Filedata()
+ passData <- reactive({
+ 
  data <- Filedata()
  #View(data)
  #str(data)
@@ -113,19 +113,21 @@ shinyServer(function(input, output, session){
     # View(data)
     # str(data)
     # print(nrow(data))
-    return(data)
+    #return(data)
   })  
   
+ 
   
 #---------------------------------------------------------------------------------------------------
 #     Histograms
 #---------------------------------------------------------------------------------------------------
-#
+ 
 #...................................................... H1
 output$histPlotAvWeight <- renderPlot({ 
   # Re-run when button is clicked
-      graphData <- passData()
-      theGraph <- histPlot(graphData, x="End.Av.Weight", nbins = input$numbins, group_var=input$radioDimUni )
+      #graphData <- passData()
+      
+      theGraph <- histPlot(data, x="End.Av.Weight", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
   
 })
@@ -135,17 +137,17 @@ output$histPlotAvWeight <- renderPlot({
 output$histPlotEcon.FCR.Period <- renderPlot({ 
   # Re-run when button is clicked
   
-      graphData <- passData()
-      theGraph <- histPlot(graphData, x="Econ.FCR.Period", nbins = input$numbins, group_var=input$radioDimUni )
+      #graphData <- passData()
+      theGraph <- histPlot(data, x="Econ.FCR.Period", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
 #...................................................... H4
 output$histPlotBio.FCR <- renderPlot({ 
   # Re-run when button is clicked
-  
+      graphData <- data
       graphData <- passData()
-      theGraph <- histPlot(graphData, x="Bio.FCR", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(data, x="Bio.FCR", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -154,7 +156,7 @@ output$histPlotPeriod.SFR <- renderPlot({
   # Re-run when button is clicked
   
       graphData <- passData()
-      theGraph <- histPlot(graphData, x="SFR.Period", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(data, x="SFR.Period", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -163,7 +165,7 @@ output$histPlotPeriod.SGR <- renderPlot({
   # Re-run when button is clicked
   
       graphData <- passData()
-      theGraph <- histPlot(graphData, x="SGR.Period", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(data, x="SGR.Period", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -172,7 +174,7 @@ output$histPlotMortality <- renderPlot({
   # Re-run when button is clicked
  
       graphData <- passData()
-      theGraph <- histPlot(graphData, x="Mortality", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(data, x="Mortality", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
    
 })
@@ -181,7 +183,7 @@ output$histPlotAverage.Fish.Density <- renderPlot({
   # Re-run when button is clicked
      
       graphData <- passData()
-      theGraph <- histPlot(graphData, x="Average.Fish.Density", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(data, x="Average.Fish.Density", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -190,7 +192,7 @@ output$histPlotAvg.Temperature <- renderPlot({
   # Re-run when button is clicked
      
       graphData <- passData()
-      theGraph <- histPlot(graphData, x="Avg.Temperature", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(data, x="Avg.Temperature", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -200,7 +202,7 @@ output$histPlotGPD <- renderPlot({
   # Re-run when button is clicked
    
       graphData <- passData()
-      theGraph <- histPlot(graphData, x="GPD", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(data, x="GPD", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -214,8 +216,8 @@ output$histPlotGPD <- renderPlot({
 output$densPlotAvWeight <- renderPlot({ 
   # Re-run when button is clicked
     
-      graphData <- passData()
-      theGraph <- densityPlot( graphData, x="End.Av.Weight", group_var=input$radioDimUni )
+      #graphData <- passData()
+      theGraph <- densityPlot( data, x="End.Av.Weight", group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -225,7 +227,7 @@ output$densPlotAvWeight <- renderPlot({
 output$densPlotEcon.FCR.Period <- renderPlot({ 
   # Re-run when button is clicked
     
-      graphData <- passData() 
+      #graphData <- passData() 
       theGraph <- densityPlot(graphData, x="Econ.FCR.Period", group_var=input$radioDimUni )
       print(theGraph)
 
@@ -234,7 +236,7 @@ output$densPlotEcon.FCR.Period <- renderPlot({
 output$densPlotBio.FCR <- renderPlot({ 
   # Re-run when button is clicked
    
-      graphData <- passData() 
+      #graphData <- passData() 
       theGraph <- densityPlot(graphData, x="Bio.FCR", group_var=input$radioDimUni )
       print(theGraph)
 
@@ -558,11 +560,13 @@ output$plotDashboard <- renderPlot({
 output$downloadBtn <- downloadHandler(
   
   filename = function() { 
-    paste0('Aquadata.xlsx')
+    paste0('aquaDataaaa.xlsx')
   },
   content = function(file) {
-    
-    write.csv(passData()[0,] , file, row.names = FALSE)
+  
+    file.copy("trackerData.xlsx", file, overwrite = TRUE)
+    #write.xlsx(passData()[0,] , file) 
+    #write.csv(passData()[0,] , file, row.names = FALSE)
     #write.csv(passData() , file, row.names = FALSE)
   }
 )
@@ -776,13 +780,6 @@ output$rangePeriod.SGR <- renderUI({
   
   
 })
-
-
-
-
-
-
-
 
 
 

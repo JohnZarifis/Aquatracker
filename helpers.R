@@ -20,13 +20,10 @@ library("plyr")
 library("dplyr")
 library("GGally")
 library("e1071")
-#library("Hmisc")
 library("effects")
 library("car")
-#library("fpc")
-#library("nlme")
 library("ggthemr") # devtools::install_github('ggthemr', 'cttobin')
-
+#
 #-----------------------------------------
 # load dataset
 #

@@ -15,6 +15,25 @@ shinyUI(
                               
                                     mainPanel(
                                       tabsetPanel(
+                                        tabPanel("Density Plots"
+                                                 ,bsCollapse(id = "collapseDensPlot" ,  open = "KPI's", 
+                                                             bsCollapsePanel("Av. Weight", style = "primary" 
+                                                                             
+                                                                             ,fluidRow(plotOutput("densPlotAvWeight"))
+                                                             ),
+                                                             bsCollapsePanel("KPI's", style = "primary" 
+                                                                             ,fluidRow(plotOutput("densPlotEcon.FCR.Period")),
+                                                                             fluidRow(plotOutput("densPlotBio.FCR")),
+                                                                             fluidRow(plotOutput("densPlotPeriod.SFR")),
+                                                                             fluidRow(plotOutput("densPlotPeriod.SGR")),
+                                                                             fluidRow( plotOutput("densPlotGPD")),
+                                                                             fluidRow(plotOutput("densPlotMortality"))),
+                                                             bsCollapsePanel("Envirnomental", style = "primary",
+                                                                             fluidRow(plotOutput("densPlotAverage.Fish.Density")),
+                                                                             fluidRow(plotOutput("densPlotAvg.Temperature"))
+                                                             )
+                                                 ) 
+                                        ), 
                                         tabPanel("Histograms"
                                                     ,fluidRow(column(3, sliderInput("numbins", "Number of bins:", 
                                                                                    min = 5, max = 100, 
@@ -39,25 +58,7 @@ shinyUI(
                                                     )
                                         )
 ), # end tabPanel Histograms 
-                                        tabPanel("Density Plots"
-                                                 ,bsCollapse(id = "collapseDensPlot" ,  open = "Av. Weight", 
-                                                             bsCollapsePanel("Av. Weight", style = "primary" 
-                                                 
-                                                  ,fluidRow(plotOutput("densPlotAvWeight"))
-                                                  ),
-                                                            bsCollapsePanel("KPI's", style = "primary" 
-                                                  ,fluidRow(plotOutput("densPlotEcon.FCR.Period")),
-                                                   fluidRow(plotOutput("densPlotBio.FCR")),
-                                                   fluidRow(plotOutput("densPlotPeriod.SFR")),
-                                                   fluidRow(plotOutput("densPlotPeriod.SGR")),
-                                                   fluidRow( plotOutput("densPlotGPD")),
-                                                   fluidRow(plotOutput("densPlotMortality"))),
-                                                            bsCollapsePanel("Envirnomental", style = "primary",
-                                                   fluidRow(plotOutput("densPlotAverage.Fish.Density")),
-                                                   fluidRow(plotOutput("densPlotAvg.Temperature"))
-                                                                            )
-                                                            ) 
-                                                 ), # end tabPanel Density Plots
+                                        # end tabPanel Density Plots
                                         tabPanel("Boxplots",
                                                  bsCollapse(id = "collapseBoxPlot" ,  open = "Av. Weight", 
                                                              bsCollapsePanel("Av. Weight", style = "primary"
@@ -111,8 +112,8 @@ shinyUI(
                                      ,tabPanel("ScatterPlots",
                                                
                                                column(3, 
-                                                      selectInput('x', 'X Axis', choices=c("Avg.Temperature","Average.Fish.Density","SFR.Period","End.Av.Weight"), selected="To"),
-                                                      selectInput('y', 'Y Axis', choices=c("Bio.FCR","Mortality","Econ.FCR.Period","SGR.Period"), selected="End.Av.Weight")
+                                                      selectInput('x', 'X Axis', choices=c("End.Av.Weight","Avg.Temperature","Average.Fish.Density","SFR.Period"), selected="To"),
+                                                      selectInput('y', 'Y Axis', choices=c("Mortality","Bio.FCR","Econ.FCR.Period","SGR.Period"), selected="End.Av.Weight")
                                                      
                                                ),
                                                column(3,
@@ -124,7 +125,7 @@ shinyUI(
                                                column(3,
                                                       checkboxInput('xmeans', 'X-axis mean'),
                                                       checkboxInput('ymeans', 'Y-axis mean'),
-                                                      checkboxInput('smooth', 'Smooth')
+                                                      checkboxInput('smooth', 'Smooth',TRUE)
                                                       
                                                ),
                                                column(3, verbatimTextOutput("cor"))
