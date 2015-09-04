@@ -112,8 +112,8 @@ shinyUI(
                                      ,tabPanel("ScatterPlots",
                                                
                                                column(3, 
-                                                      selectInput('x', 'X Axis', choices=c("End.Av.Weight","Avg.Temperature","Average.Fish.Density","SFR.Period"), selected="To"),
-                                                      selectInput('y', 'Y Axis', choices=c("Mortality","Bio.FCR.Period","Econ.FCR.Period","SGR.Period"), selected="End.Av.Weight")
+                                                      selectInput('x', 'X Axis', choices=c("End.Av.Weight","Avg.Temperature","Average.Fish.Density","SFR.Period"), selected="End.Av.Weight"),
+                                                      selectInput('y', 'Y Axis', choices=c("Mortality.Percentage","Bio.FCR.Period","Econ.FCR.Period","SGR.Period"), selected="Mortality.Percentage")
                                                      
                                                ),
                                                column(3,

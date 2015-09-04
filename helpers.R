@@ -54,7 +54,7 @@ create_dataset <- function(dataset){
                      ,"Econ.FCR.Period" = round(dataset$'Econ FCR',digits=2)
                      ,"Bio.FCR.Period" =  round(dataset$"Bio FCR" , digits = 2)
                      ,"Mortality.No" = dataset$'Mortality (No)' 
-                     ,"Mortality" = round(dataset$"Mortality (%)", digits = 2)
+                     ,"Mortality.Percentage" = round(dataset$"Mortality (%)", digits = 2)
                      ,"SFR.Period" = round(dataset$'SFR' , digits = 2)
                      ,"SGR.Period" = round(dataset$'SGR' , digits = 2)
                      ,"GPD" = round(dataset$"GPD (%)", digits = 2)

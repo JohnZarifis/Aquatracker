@@ -6,23 +6,19 @@ source("helpers.R")
 #View(df)
 
 sidebarUni <- sidebarPanel(
-  #fixed responsive img #added class img
-  img(src="logoAq.jpg", class = "img-responsive"),
   
-#   bsCollapse(id = "collapseSidebar" ,  #open = "Dimensions", 
-#              bsCollapsePanel("Dimensions", style = "primary" ,
-  #h2("Dimensions"),
-  fluidRow(column(6,
-    radioButtons("radioDimUni", label = h3("Separate The Dataset By:"), 
-                 choices = list("None", "Batch", "Hatchery","Origin.Year",  "Actual.Feed",'Month.Sampling'), selected = "Hatchery") #)
+  fluidRow(column(6,img(src="logo.jpg", class = "img-responsive")
+                  )
     
-    #,shinyFilesButton('file', 'Upload Your Data', 'Please select an Excel file', FALSE)
-  ),
-  column(6,img(src="logoAq.jpg", class = "img-responsive")
-          ))
-#,hr()
-#bsCollapsePanel('Measures', style = "primary" ,
-#h2('Measures'),
+    
+    ,column(6,
+    radioButtons("radioDimUni", label = h3("Separate The Dataset By:"), 
+                 choices = list("None", "Batch", "Hatchery","Year Class"="Origin.Year" , "Feed"="Actual.Feed",'Month.Sampling'), selected = "Hatchery") #)
+    
+    
+           )
+    )
+
 ,fluidRow(column(6,
                  uiOutput("rangeStAvWeight")
                  ,uiOutput("rangeBioFCR")

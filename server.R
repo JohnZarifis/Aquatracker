@@ -31,7 +31,7 @@ shinyServer(function(input, output, session){
  passData <- reactive({
    
  data <- Filedata()
- View(data)
+ 
     if (input$groupUnit != "All"){ 
       data <- subset(data, Unit %in% c(input$groupUnit))
     }
@@ -57,7 +57,7 @@ shinyServer(function(input, output, session){
                    & data$Days >= as.numeric(input$rangeDays[1]) & data$Days <= as.numeric(input$rangeDays[2])  
                    & data$SGR.Period >= as.numeric(input$rangePeriod.SGR[1]) & data$SGR.Period <= as.numeric(input$rangePeriod.SGR[2]) 
                    & data$SFR.Period >= as.numeric(input$rangePeriod.SFR[1]) & data$SFR.Period <= as.numeric(input$rangePeriod.SFR[2]) 
-                   & data$Mortality >= as.numeric(input$rangeMortality[1]) & data$Mortality <= as.numeric(input$rangeMortality[2])
+                   & data$Mortality.Percentage >= as.numeric(input$rangeMortality[1]) & data$Mortality.Percentage <= as.numeric(input$rangeMortality[2])
                    & data$Avg.Temperature >= as.numeric(input$rangeAvgTemp[1]) 
                    & data$Avg.Temperature <= as.numeric(input$rangeAvgTemp[2])
                    & (data$From >= ymd(input$dateRangeFrom[1]) & data$From <= ymd(input$dateRangeFrom[2])) 
@@ -148,7 +148,7 @@ output$histPlotMortality <- renderPlot({
   # Re-run when button is clicked
  
       graphData <- passData()
-      theGraph <- histPlot(graphData, x="Mortality", nbins = input$numbins, group_var=input$radioDimUni )
+      theGraph <- histPlot(graphData, x="Mortality.Percentage", nbins = input$numbins, group_var=input$radioDimUni )
       print(theGraph)
    
 })
@@ -238,7 +238,7 @@ output$densPlotMortality <- renderPlot({
   # Re-run when button is clicked
  
       graphData <- passData()   
-      theGraph <- densityPlot(graphData, x="Mortality", group_var=input$radioDimUni )
+      theGraph <- densityPlot(graphData, x="Mortality.Percentage", group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -325,7 +325,7 @@ output$boxPlotMortality <- renderPlot({
   # Re-run when button is clicked
  
       graphData <- passData()
-      theGraph <- boxPlots( graphData, x="Mortality", group_var=input$radioDimUni )
+      theGraph <- boxPlots( graphData, x="Mortality.Percentage", group_var=input$radioDimUni )
       print(theGraph)
 
 })
@@ -413,7 +413,7 @@ output$summary_stats_PeriodSGR <- renderTable({
 output$summary_stats_Mortality <- renderTable({
   
       data <- passData()
-      data_stats <- sum_stats(data, measurevar="Mortality", groupvars=input$radioDimUni,
+      data_stats <- sum_stats(data, measurevar="Mortality.Percentage", groupvars=input$radioDimUni,
                                  na.rm=FALSE, conf.interval=.95, .drop=TRUE)
     
     return(data_stats)
@@ -516,7 +516,7 @@ output$downloadBtn <- downloadHandler(
   },
   content = function(file) {
   
-    file.copy("trackerData.xlsx", file, overwrite = TRUE)
+    file.copy("Template.xlsx", file, overwrite = TRUE)
     #write.xlsx(passData()[0,] , file) 
     #write.csv(passData()[0,] , file, row.names = FALSE)
     #write.csv(passData() , file, row.names = FALSE)
@@ -548,7 +548,7 @@ output$groupHatchery <- renderUI({
 output$groupOriginYear <- renderUI({
   
   df<- Filedata()
-  selectInput(inputId='groupOriginYear', label='Origin.Year', choices=c("All", unique(as.character(df$Origin.Year))), selected="All", multiple=TRUE)
+  selectInput(inputId='groupOriginYear', label='Year Class', choices=c("All", unique(as.character(df$Origin.Year))), selected="All", multiple=TRUE)
   
 })
 output$groupMonth.Sampling <- renderUI({
@@ -561,7 +561,7 @@ output$groupMonth.Sampling <- renderUI({
 output$groupFood <- renderUI({
   
   df<- Filedata()
-  selectInput(inputId='groupFood', label='Actual.Feed', choices=c("All", unique(as.character(df$Actual.Feed))), selected="All", multiple=TRUE)
+  selectInput(inputId='groupFood', label='Feed', choices=c("All", unique(as.character(df$Actual.Feed))), selected="All", multiple=TRUE)
   
 })
 
@@ -712,10 +712,10 @@ output$rangeMortality <- renderUI({
   
   df<- Filedata()
   sliderInput("rangeMortality", "Mortality (%):", 
-              min = min(as.double(df$Mortality), na.rm=TRUE), 
-              max = max(as.double(df$Mortality), na.rm=TRUE), 
-              value = c(min(as.double(df$Mortality)), 
-                        max(as.double(df$Mortality))), 
+              min = min(as.double(df$Mortality.Percentage), na.rm=TRUE), 
+              max = max(as.double(df$Mortality.Percentage), na.rm=TRUE), 
+              value = c(min(as.double(df$Mortality.Percentage)), 
+                        max(as.double(df$Mortality.Percentage))), 
               step=0.1, round=-1, sep=".")
   
   
