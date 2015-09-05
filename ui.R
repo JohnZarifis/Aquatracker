@@ -155,9 +155,9 @@ shinyUI(
                           fluidRow(
                             wellPanel(
                               
-                              img(src="logo.jpg", class = "img-responsive"),
+                              img(src="logo.jpg",  height = 150, width = 150),
                     
-                              h2("AquaSmart the European Big Data project for the Aquaculture sector:")
+                              h2("AquaSmart: the European Big Data project for the Aquaculture sector:")
 
                               , p(strong("AquaSmart"),a("www.aquasmartdata.eu",href = "http://www.aquasmartdata.eu") 
                               , "is the European Big Data project for the Aquaculture sector

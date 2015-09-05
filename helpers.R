@@ -30,8 +30,8 @@ library("ggthemr") # devtools::install_github('ggthemr', 'cttobin')
 pathname = paste(getwd(), "aquaData.xlsx", sep="/")
 Dataset <- read_excel(pathname, sheet = 1 ,col_names = TRUE, na='na')
 
-View(Dataset)
-str(Dataset)
+#View(Dataset)
+#str(Dataset)
 
 # ------------------------
 # Create the dataset
@@ -81,8 +81,8 @@ create_dataset <- function(dataset){
   #"ProductionTimeDays" = paste(01,dataset$Origin.Month, dataset$Origin.Year, sep="-" )
 }
 df <- create_dataset(Dataset)
-View(df) # for debugging reasons
-str(df)
+#View(df) # for debugging reasons
+#str(df)
 #source("SidebarUi.R")
 
 #-----------------------------------------------------------------------------------------------------
