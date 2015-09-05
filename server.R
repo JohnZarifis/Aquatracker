@@ -21,9 +21,15 @@ shinyServer(function(input, output, session){
       Filedata <- data
       return(Filedata)
       }
-    Filedata<-read.csv(inFile$datapath)
-    Filedata$From <-  ymd(Filedata$From)
-    Filedata$To <-  ymd(Filedata$To)
+    Filedata<-read.csv2(inFile$datapath)
+    #View(Filedata)
+    
+    #Filedata$From <-  ymd(Filedata$From)
+    #Filedata$To <-  ymd(Filedata$To)
+    View(Filedata)
+    str(Filedata)
+    Filedata <- create_dataset(Filedata)
+    
     return(Filedata)
     
   })

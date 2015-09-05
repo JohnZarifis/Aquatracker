@@ -30,8 +30,8 @@ library("ggthemr") # devtools::install_github('ggthemr', 'cttobin')
 pathname = paste(getwd(), "aquaData.xlsx", sep="/")
 Dataset <- read_excel(pathname, sheet = 1 ,col_names = TRUE, na='na')
 
-#View(Dataset)
-#str(Dataset)
+View(Dataset)
+str(Dataset)
 
 # ------------------------
 # Create the dataset
@@ -51,18 +51,18 @@ create_dataset <- function(dataset){
                      ,"Period.Feed.Qty" = dataset$'Feed Qty (Kg)'
                      ,"Opening.Fish.No" = dataset$'Start.FishNo' 
                      ,"Closing.Fish.No" = dataset$'End.FishNo' 
-                     ,"Econ.FCR.Period" = round(dataset$'Econ FCR',digits=2)
-                     ,"Bio.FCR.Period" =  round(dataset$"Bio FCR" , digits = 2)
+                     ,"Econ.FCR.Period" = round(as.numeric(dataset$'Econ FCR'),digits=2)
+                     ,"Bio.FCR.Period" =  round(as.numeric(dataset$"Bio FCR") , digits = 2)
                      ,"Mortality.No" = dataset$'Mortality (No)' 
-                     ,"Mortality.Percentage" = round(dataset$"Mortality (%)", digits = 2)
-                     ,"SFR.Period" = round(dataset$'SFR' , digits = 2)
-                     ,"SGR.Period" = round(dataset$'SGR' , digits = 2)
-                     ,"GPD" = round(dataset$"GPD (%)", digits = 2)
+                     ,"Mortality.Percentage" = round(as.numeric(dataset$"Mortality (%)"), digits = 2)
+                     ,"SFR.Period" = round(as.numeric(dataset$'SFR') , digits = 2)
+                     ,"SGR.Period" = round(as.numeric(dataset$'SGR') , digits = 2)
+                     ,"GPD" = round(as.numeric(dataset$"GPD (%)"), digits = 2)
                      ,"Protein" = dataset$"Protein (%)"
-                     ,"Avg.Temperature" = round(dataset$'Av. Temp', digits = 2)
+                     ,"Avg.Temperature" = round(as.numeric(dataset$'Av. Temp'), digits = 2)
                      ,"Days" = dataset$Days
-                     ,"Net.Growth" =round(dataset$"Net Growth (Kg)", digits = 0)
-                     ,"Average.Fish.Density" = round(dataset$"Average Fish Density",digits = 2)
+                     ,"Net.Growth" =round(as.numeric(dataset$"Net Growth (Kg)"), digits = 0)
+                     ,"Average.Fish.Density" = round(as.numeric(dataset$"Average Fish Density"),digits = 2)
                      ,"Digestible.Protein" = dataset$"Digestible Protein (%)"
                      ,"Fat" = dataset$"Fat (%)"
                      ,"Animal.Protein" = dataset$"Animal Protein (%)"
@@ -81,7 +81,8 @@ create_dataset <- function(dataset){
   #"ProductionTimeDays" = paste(01,dataset$Origin.Month, dataset$Origin.Year, sep="-" )
 }
 df <- create_dataset(Dataset)
-#View(df) # for debugging reasons
+View(df) # for debugging reasons
+str(df)
 #source("SidebarUi.R")
 
 #-----------------------------------------------------------------------------------------------------
