@@ -142,6 +142,8 @@ shinyUI(
                 fluidRow( 
                  wellPanel(
                    h4("How to upload data")
+                   ,p("You can upload a csv file that is generated from Aquatracker or Download the empty Template, using the Download button bellow.")
+                   ,p("")
                   ,h4("How to download template")
                   ,downloadButton("downloadBtn", "Download Template")
                   , br()
@@ -153,9 +155,9 @@ shinyUI(
                           fluidRow(
                             wellPanel(
                               
-                              img(src="Aquasmart.png", class = "img-responsive"),
+                              img(src="logo.jpg", class = "img-responsive"),
                     
-                              h2("The European Big Data project for the Aquaculture sector:")
+                              h2("AquaSmart the European Big Data project for the Aquaculture sector:")
 
                               , p(strong("AquaSmart"),a("www.aquasmartdata.eu",href = "http://www.aquasmartdata.eu") 
                               , "is the European Big Data project for the Aquaculture sector

@@ -23,11 +23,12 @@ shinyServer(function(input, output, session){
       }
     Filedata<-read.csv2(inFile$datapath)
     #View(Filedata)
-    
-    #Filedata$From <-  ymd(Filedata$From)
-    #Filedata$To <-  ymd(Filedata$To)
-    View(Filedata)
-    str(Filedata)
+    names(Filedata) <- names(Dataset)
+    Filedata$Start.Date <- parse_date_time(as.character(Filedata$Start.Date), c("%y%m%d", "%m%d%y","%d%m%y"), quiet = TRUE)
+    Filedata$End.Date <- parse_date_time(as.character(Filedata$End.Date), c("%y%m%d", "%m%d%y","%d%m%y"), quiet = TRUE)
+  
+    #View(Filedata)
+    #str(Filedata)
     Filedata <- create_dataset(Filedata)
     
     return(Filedata)
@@ -578,7 +579,7 @@ output$dateRangeFrom <- renderUI({
   
   df<- Filedata()
   dateRangeInput('dateRangeFrom',
-                 label = paste(' From: '),
+                 label = paste(' End Date: '),
                  start = min( ymd(df$From)-days(0) ), 
                  end = max( ymd(df$From)+days(1) ),
                  min = min( ymd(df$From)-days(0) ),
@@ -594,7 +595,7 @@ output$dateRangeTo <- renderUI({
   
   df<- Filedata()
   dateRangeInput('dateRangeTo',
-                 label = paste(' To: '),
+                 label = paste(' Start Date: '),
                  start = min( ymd(df$To)-days(1) ), 
                  end = max( ymd(df$To)+days(1) ),
                  min = min( ymd(df$To)-days(1) ),
