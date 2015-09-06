@@ -464,12 +464,12 @@ output$summary_stats_Avg.Temp <- renderTable({
 output$cor <- renderPrint({
   
       data <- passData()
-#       if ( input$radioDimUni != 'None'){   
-#         d <- ddply(data, input$radioDimUni, summarise, "Pearson Correlation" = cor(x=data$input$x, y=data$input$y))
-#       }else{
-#         d <- data.frame("Pearson Correlation" = cor(x=data$input$x, y=data$input$y))
-#       }
-      return( input$x ) 
+       if ( input$radioDimUni != 'None'){   
+         d <- ddply(data, input$radioDimUni, summarise, "Pearson Correlation" = cor(x=input$x, y=input$y))
+       }else{
+         d <- data.frame("Pearson Correlation" = cor(x=input$x, y=input$y))
+       }
+      return( x ) 
      
   
 })
