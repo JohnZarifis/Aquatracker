@@ -122,15 +122,15 @@ shinyUI(
                                                       selectInput('facet_col', 'Multiple Columns',
                                                                   c(None='.', names(df[sapply(df, is.factor)])))
                                                ),
-                                               column(3,
+                                               column(2,
                                                       checkboxInput('xmeans', 'X-axis mean'),
                                                       checkboxInput('ymeans', 'Y-axis mean'),
                                                       checkboxInput('smooth', 'Smooth',TRUE)
                                                       
                                                ),
-                                               column(3, verbatimTextOutput("cor"))
+                                               column(4, verbatimTextOutput("cor"))
                                                
-                                               ,plotOutput('plotDashboard',height="800px"))
+                                               ,plotOutput('plotDashboard',height="750px"))
                                      ) # end tabsetPanel
                                     )# end mainPanel
                                   ) # end sidebarLayout

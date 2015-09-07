@@ -93,12 +93,12 @@ df <- create_dataset(Dataset)
 ##   groupvars: a vector containing names of columns that contain grouping variables
 ##   na.rm: a boolean that indicates whether to ignore NA's
 ##   conf.interval: the percent range of the confidence interval (default is 95%)
-summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,
+summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=TRUE,
                       conf.interval=.95, .drop=TRUE,w,quant) {
   require(plyr)
   
   # New version of length which can handle NA's: if na.rm==T, don't count them
-  length2 <- function (x, na.rm=FALSE) {
+  length2 <- function (x, na.rm=TRUE) {
     if (na.rm) sum(!is.na(x))
     else       length(x)
   }
