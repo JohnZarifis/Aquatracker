@@ -467,11 +467,11 @@ output$cor <- renderPrint({
       View(data[,c(input$x,input$y)])
       x <- data[,input$x]
       y <- data[,input$y]
-      View(x)
+      
        if ( input$radioDimUni != 'None'){   
          d <- ddply(data, input$radioDimUni, summarise, "Pearson Correlation" = cor(x=x, y=y))
        }else{
-         d <- data.frame("Pearson Correlation" = cor(x=data$input$x, y=data$input$y))
+         d <- data.frame("Pearson Correlation" = cor(x=x, y=y))
        }
       return( d ) 
      
