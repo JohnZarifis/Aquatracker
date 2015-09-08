@@ -57,6 +57,15 @@ column(6,
                      )
            )
 
+,radioButtons('sep', ' Column Separator',
+              c('Comma(,)'=',',
+                'Semicolon(;)'=';',
+                Tab='\t'),
+                ';',inline = TRUE)
+,radioButtons('dec','Decimal',
+              c('Comma (,)'=',','period (.)' ='.'
+              ),',',inline = TRUE)
+
 
 
 ) # end sidebarUni function

@@ -20,20 +20,17 @@ shinyServer(function(input, output, session){
     if (is.null(inFile)){
       Filedata <- data
       return(Filedata)
-      }
-    Filedata<-read.csv2(inFile$datapath, dec = ","  )
-    View(Filedata)
-    str(Filedata)
+    }
+    
+    Filedata<-read.csv(inFile$datapath, dec = input$dec , sep=input$sep  )
     names(Filedata) <- names(Dataset)
-    #df$V2 <- as.numeric(gsub(',', '', df$V2))
+    Filedata$Start.FishNo <- as.integer(as.character(gsub('.', '', Filedata$Start.FishNo,fixed = TRUE)))
+    Filedata$End.FishNo <- as.integer(as.character(gsub('.', '', Filedata$End.FishNo,fixed = TRUE)))
+    Filedata$'Mortality (No)' <- as.integer(as.character(gsub('.', '', Filedata$'Mortality (No)',fixed = TRUE)))
     Filedata$Start.Date <- parse_date_time(as.character(Filedata$Start.Date), c("%d%m%y","%y%m%d", "%m%d%y"), quiet = TRUE)
     Filedata$End.Date <- parse_date_time(as.character(Filedata$End.Date), c("%d%m%y","%y%m%d", "%m%d%y"), quiet = TRUE)
-  
-    #View(Filedata)
-    #str(Filedata)
     Filedata <- create_dataset(Filedata)
-    View(Filedata)
-    str(Filedata)
+    
     return(Filedata)
     
   })
@@ -254,8 +251,13 @@ shinyServer(function(input, output, session){
   
   
  passData <- reactive({
+   validate(
+   need(!is.null(input$groupUnit),"Loading Data plz wait.")
+   )
    
  data <- Filedata()
+     
+  
  
     if (input$groupUnit != "All"){ 
       data <- subset(data, Unit %in% c(input$groupUnit))
@@ -273,7 +275,7 @@ shinyServer(function(input, output, session){
     if (input$groupMonth.Sampling != "All"){ 
       data <- subset(data, Month.Sampling %in% c(input$groupMonth.Sampling))
     }
-    
+   
      data <- data[ data$End.Av.Weight >= as.numeric(input$rangeAvWeight[1]) & data$End.Av.Weight <= as.numeric(input$rangeAvWeight[2])
                    & data$Start.Av.Weight >= as.numeric(input$rangeStAvWeight[1]) & data$Start.Av.Weight <= as.numeric(input$rangeStAvWeight[2])
                    & data$Bio.FCR.Period >= as.numeric(input$rangeBioFCR[1])
@@ -313,7 +315,7 @@ shinyServer(function(input, output, session){
      #View(data)
     # str(data)
     # print(nrow(data))
-    #return(data)
+    return(data)
   })  
   
  
@@ -326,8 +328,13 @@ shinyServer(function(input, output, session){
 output$histPlotAvWeight <- renderPlot({ 
   # Re-run when button is clicked
       graphData <- passData()
-      theGraph <- histPlot(graphData, x="End.Av.Weight", nbins = input$numbins, group_var=input$radioDimUni )
-      print(theGraph)
+      
+     theGraph <- histPlot(graphData, x="End.Av.Weight", nbins = input$numbins, group_var=input$radioDimUni )
+     validate(     
+need(
+  try(print(theGraph))
+      ,"Not enough data to produce a plot")
+               )
   
 })
 
@@ -338,7 +345,11 @@ output$histPlotEcon.FCR.Period <- renderPlot({
   
       graphData <- passData()
       theGraph <- histPlot(graphData, x="Econ.FCR.Period", nbins = input$numbins, group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... H4
@@ -347,7 +358,11 @@ output$histPlotBio.FCR <- renderPlot({
       
       graphData <- passData()
       theGraph <- histPlot(graphData, x="Bio.FCR.Period", nbins = input$numbins, group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... H5
@@ -356,7 +371,11 @@ output$histPlotPeriod.SFR <- renderPlot({
   
       graphData <- passData()
       theGraph <- histPlot(graphData, x="SFR.Period", nbins = input$numbins, group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... H6
@@ -365,7 +384,11 @@ output$histPlotPeriod.SGR <- renderPlot({
   
       graphData <- passData()
       theGraph <- histPlot(graphData, x="SGR.Period", nbins = input$numbins, group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... H7
@@ -374,7 +397,11 @@ output$histPlotMortality <- renderPlot({
  
       graphData <- passData()
       theGraph <- histPlot(graphData, x="Mortality.Percentage", nbins = input$numbins, group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
    
 })
 #...................................................... H8
@@ -383,7 +410,11 @@ output$histPlotAverage.Fish.Density <- renderPlot({
      
       graphData <- passData()
       theGraph <- histPlot(graphData, x="Average.Fish.Density", nbins = input$numbins, group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... H9
@@ -392,7 +423,11 @@ output$histPlotAvg.Temperature <- renderPlot({
      
       graphData <- passData()
       theGraph <- histPlot(graphData, x="Avg.Temperature", nbins = input$numbins, group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 
@@ -417,7 +452,11 @@ output$densPlotAvWeight <- renderPlot({
     
       graphData <- passData()
       theGraph <- densityPlot( graphData, x="End.Av.Weight", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... D1
@@ -428,7 +467,11 @@ output$densPlotEcon.FCR.Period <- renderPlot({
     
       graphData <- passData() 
       theGraph <- densityPlot(graphData, x="Econ.FCR.Period", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... D4
@@ -437,7 +480,11 @@ output$densPlotBio.FCR <- renderPlot({
    
       graphData <- passData() 
       theGraph <- densityPlot(graphData, x="Bio.FCR.Period", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... D5
@@ -446,7 +493,11 @@ output$densPlotPeriod.SFR <- renderPlot({
    
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="SFR.Period", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... D6
@@ -455,7 +506,11 @@ output$densPlotPeriod.SGR <- renderPlot({
    
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="SGR.Period", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... D7
@@ -464,7 +519,11 @@ output$densPlotMortality <- renderPlot({
  
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="Mortality.Percentage", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... D8
@@ -473,7 +532,11 @@ output$densPlotAverage.Fish.Density <- renderPlot({
  
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="Average.Fish.Density", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... D9
@@ -482,7 +545,11 @@ output$densPlotAvg.Temperature <- renderPlot({
     
       graphData <- passData()   
       theGraph <- densityPlot(graphData, x="Avg.Temperature", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... D10
@@ -505,7 +572,11 @@ output$boxPlotAvWeight <- renderPlot({
  
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="End.Av.Weight", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 
@@ -515,7 +586,11 @@ output$boxPlotEcon.FCR.Period <- renderPlot({
     
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="Econ.FCR.Period", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... B4
@@ -524,7 +599,11 @@ output$boxPlotBio.FCR <- renderPlot({
    
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="Bio.FCR.Period", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... B5
@@ -533,7 +612,11 @@ output$boxPlotSFR.Period <- renderPlot({
     
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="SFR.Period", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... B6
@@ -551,7 +634,11 @@ output$boxPlotMortality <- renderPlot({
  
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="Mortality.Percentage", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... B8
@@ -560,7 +647,11 @@ output$boxPlotAverage.Fish.Density <- renderPlot({
     
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="Average.Fish.Density", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 #...................................................... B9
@@ -569,7 +660,11 @@ output$boxPlotAvg.Temperature <- renderPlot({
      
       graphData <- passData()
       theGraph <- boxPlots( graphData, x="Avg.Temperature", group_var=input$radioDimUni )
-      print(theGraph)
+      validate(     
+        need(
+          try(print(theGraph))
+          ,"Not enough data to produce a plot")
+      )
 
 })
 

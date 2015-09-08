@@ -1,8 +1,8 @@
 name: Aquatracker
 account: johnzarifis
 server: shinyapps.io
-bundleId: 258944
+bundleId: 260126
 url: https://johnzarifis.shinyapps.io/Aquatracker
-when: 1441475088.38336
+when: 1441685450.24501
 asMultiple: FALSE
 asStatic: FALSE
