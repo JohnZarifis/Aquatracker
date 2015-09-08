@@ -22,7 +22,7 @@ shinyServer(function(input, output, session){
       return(Filedata)
     }
     
-    Filedata<-read.csv(inFile$datapath, dec = input$dec , sep=input$sep  )
+    Filedata<-read.csv(inFile$datapath, dec = input$dec , sep=input$sep ,encoding = 'UTF-8')
     names(Filedata) <- names(Dataset)
     Filedata$Start.FishNo <- as.integer(as.character(gsub('.', '', Filedata$Start.FishNo,fixed = TRUE)))
     Filedata$End.FishNo <- as.integer(as.character(gsub('.', '', Filedata$End.FishNo,fixed = TRUE)))
