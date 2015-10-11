@@ -780,8 +780,9 @@ output$cor <- renderPrint({
       x <- data[,input$x]
       y <- data[,input$y]
       
-       if ( input$radioDimUni != 'None'){   
-         d <- ddply(data, input$radioDimUni, summarise, "Pearson Correlation" = cor(x=x, y=y))
+       if ( input$radioDimUni != 'None'){
+         group.var = as.character(input$radioDimUni)
+         d <- ddply(data, group.var, summarise, cor(x=x, y=y)) #"Pearson Correlation" = 
        }else{
          d <- data.frame("Pearson Correlation" = cor(x=x, y=y))
        }
