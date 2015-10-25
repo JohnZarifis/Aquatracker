@@ -777,19 +777,35 @@ output$summary_stats_Avg.Temp <- renderTable({
 output$cor <- renderPrint({
   
       data <- passData()
-      x <- data[, input$x]
-      y <- data[, input$y]
+      x <- input$x
+      y <- input$y
+      #x <- as.name(input$x)
+      #y <- as.name(input$y)
+      #x <-    gsub("\"", "",x)
+      #y <-   gsub("\"", "",y)
+      group.var <- input$radioDimUni
      
       
        if ( input$radioDimUni != 'None'){
-         group.var = as.character(input$radioDimUni)
-         d <- ddply(data, group.var, summarise, "Pearson Correlation" = cor(x=as.vector(x), y=as.vector(y))) 
+        # df1 <- group_by()
+        # group.var <- gsub("\"", "",group.var)
+        #df1<- group_by_(data,input$radioDimUni)
+         #View(df1)
+         #f <- substitute(cor(x,y), list(x = as.name(input$x),y = as.name(input$y)))
+         d <- ddply(.data = data, as.symbol(group.var), summarise, "Pearson Correlation" = cor(x=as.symbol(x), y=as.symbol(y)))
+         #d <- summarise(df1,ov = f)
        }else{
-         d <- data.frame("Pearson Correlation" = cor(x=x, y=y))
+         d <- data.frame("Pearson Correlation" = cor(x=as.symbol(x), y=as.symbol(y)))
        }
       return( d ) 
      
-  
+      
+       
+#       df2<-summarise(df1,ov=mean(get(input$var),na.rm=T)
+#       
+#       f <- substitute(mean(var, na.rm = TRUE), list(var = as.name(input$var)))
+#       df2 <- summarise_(df1, ov = f)
+#   
 })
 
 
